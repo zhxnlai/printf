@@ -16,6 +16,7 @@ var config       = require('../config').browserify;
 var uglify = require('gulp-uglify');
 var streamify = require('gulp-streamify');
 var gutil = require('gulp-util');
+var fs = require('fs');
 
 gulp.task('browserify', function(callback) {
 
@@ -39,7 +40,10 @@ gulp.task('browserify', function(callback) {
       bundleLogger.start(bundleConfig.outputName);
 
       return bundler
+        // .transform('brfs')
+
         .bundle()
+
         // Report compile errors
         .on('error', handleErrors)
         // Use vinyl-source-stream to make the
@@ -49,7 +53,10 @@ gulp.task('browserify', function(callback) {
         // uglify
         // .pipe(streamify(uglify()))
         .pipe(gutil.env.type === 'production' ? streamify(uglify()) : gutil.noop())
-        
+
+
+        // .pipe(fs.createWriteStream('bundle.js'))
+
         // Specify the output destination
         .pipe(gulp.dest(bundleConfig.dest))
         .on('end', reportFinished);

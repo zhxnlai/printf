@@ -15,7 +15,7 @@
         {
           "es6": true
         }
-      ]
+      ], ["brfs", {}]
     ]
   },
   "devDependencies": {
