@@ -4,7 +4,7 @@ var assign = require('object-assign');
 
 var Input = require('../components/Input.jsx');
 var Visualization = require('../components/Visualization.jsx');
-// var Visualization = require('../components/Visualization.jsx');
+var Explanation = require('../components/Explanation.jsx');
 
 var EditorStore = require('../../stores/EditorStore.js');
 var EditorActionCreators = require('../../actions/EditorActionCreators.js');
@@ -15,7 +15,7 @@ function getStateFromStores() {
   };
 }
 
-var Dashboard = React.createClass({
+var Demo = React.createClass({
   mixins: [Router.State, Router.Navigation],
 
   getInitialState: function() {
@@ -41,35 +41,17 @@ var Dashboard = React.createClass({
   render: function() {
     return (
       <div className="demo-page">
-        <Input/>
-        <Visualization/>
+        <div className="leftPanel">
+          <Input/>
+          <Visualization/>
+        </div>
+        <div className="rightPanel">
+          <Explanation/>
+        </div>
       </div>
     );
   }
 
 });
 
-module.exports = Dashboard;
-
-
-/*
-<Navbar>
-  <Nav>
-    <NavItemLink
-      to="demo"
-      params={{ someparam: 'hello' }}>
-      Printf 101
-    </NavItemLink>
-
-  </Nav>
-</Navbar>
-
-<br />
-ButtonLink<br />
-<ButtonLink
-  to="demo"
-  params={{ someparam: 'hello' }}>
-  Linky!
-</ButtonLink>
-<RouteHandler />
-*/
+module.exports = Demo;

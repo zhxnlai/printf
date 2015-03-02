@@ -83,6 +83,19 @@ var Visualization = React.createClass({
     this.setState(getStateFromStores());
   },
 
+
+  onMouseOverPExpr: function(e) {
+    console.log("over");
+  },
+
+  onMouseOutPExpr: function(e) {
+    console.log("out");
+  },
+
+  onClickPExpr: function(e) {
+    console.log("click");
+  },
+
   render: function() {
 
     var tree = <h1>{this.state.text}</h1>;
@@ -99,51 +112,13 @@ var Visualization = React.createClass({
         trace = e.state.trace;
       }
 
-      // (function createTraceElement(traceNode, container, input) {
-      //   // var wrapper = container.appendChild(createElement('.pexpr'));
-      //   // if (!traceNode.succeeded)
-      //   // wrapper.classList.add('failed');
-      //   //
-      //   // wrapper.addEventListener('click', function(e) {
-      //   // toggleTraceElement(wrapper);
-      //   // e.stopPropagation();
-      //   // e.preventDefault();
-      //   // });
-      //   //
-      //   // wrapper.addEventListener('mouseover', function(e) {
-      //   // input.classList.add('highlight');
-      //   // e.stopPropagation();
-      //   // });
-      //   // wrapper.addEventListener('mouseout', function(e) {
-      //   // input.classList.remove('highlight');
-      //   // });
-      //   // wrapper._input = input;
-      //   //
-      //   // var label = wrapper.appendChild(createElement('.label', traceNode.displayString));
-      //   // if (traceNode.expr.isPrimitive())
-      //   // label.classList.add('prim');
-      //
-      //
-      //   var label = <div className="">traceNode.displayString</div>;
-      //   // if (traceNode.expr.isPrimitive())
-      //   // label.classList.add('prim');
-      //   var wrapper = <div>{label}</div>;
-      //
-      //   return wrapper;
-      // })
-
-      // tree = [];
+      var self = this;
       tree = (function walkTraceNodes(nodes, container, inputContainer, showTrace) {
         return nodes.map(function(node) {
           if (!node.succeeded) return;  // TODO: Allow failed nodes to be shown.
 
           var contents = node.expr.isPrimitive() ? node.interval.contents : '';
-          // var childInput = inputContainer.appendChild(createElement('span.input', contents));
           var isWhitespace = contents.length > 0 && contents.trim().length === 0;
-          // if (isWhitespace) {
-          //   childInput.innerHTML = '&#xb7;';  // Unicode Character 'MIDDLE DOT'
-          //   childInput.classList.add('whitespace');
-          // }
 
           var shouldShowTrace = showTrace && !isBlackhole(node);
 
@@ -169,7 +144,6 @@ var Visualization = React.createClass({
           }
 
           if ((shouldShowTrace && shouldNodeBeVisible(node)) || isWhitespace) {
-          // if ((shouldNodeBeVisible(node)) || isWhitespace) {
             var labelClasses = cx({
               'label': true,
               'prim': node.expr.isPrimitive(),
@@ -184,7 +158,13 @@ var Visualization = React.createClass({
               'pexpr': true,
               'whitespace': isWhitespace,
             });
-            return <div className={pexprClasses}>{label}{children}</div>;
+            // console.log(this.onMouseOverPExpr);
+            var props = {
+              onMouseOver: self.onMouseOverPExpr,
+              onMouseOut: self.onMouseOutPExpr,
+              onClick: self.onClickPExpr
+            };
+            return <div className={pexprClasses} {...props}>{label}{children}</div>;
           } else {
             return childNodes;
           }
@@ -194,7 +174,7 @@ var Visualization = React.createClass({
         });
       })(trace, undefined, undefined, true);
 
-      console.log(tree);
+      // console.log(tree);
 
       // React.isValidElement
       tree = (function transformTopLevelNodes(node) {

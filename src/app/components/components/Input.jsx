@@ -3,19 +3,15 @@ var Classable = require('../../mixins/classable.js');
 var assign = require('object-assign');
 
 var CodeMirror = require('react-code-mirror');
-require('codemirror/mode/javascript/javascript');
 
-// var WindowListenable = require('../../mixins/window-listenable.js');
 var EditorStore = require('../../stores/EditorStore.js');
 var EditorActionCreators = require('../../actions/EditorActionCreators.js');
 
 function getStateFromStores() {
   return {
     text : EditorStore.getText(),
-    // grammar : EditorStore.getGrammar(),
   };
 }
-
 
 var Input = React.createClass({
   mixins: [Classable],
@@ -25,7 +21,7 @@ var Input = React.createClass({
   },
 
   propTypes: {
-    value: React.PropTypes.string.isRequired,
+    // value: React.PropTypes.string.isRequired,
   },
 
   onEditorTextChange: function(e) {
@@ -36,9 +32,21 @@ var Input = React.createClass({
     var classes = this.getClasses('editor', {
     });
 
-    return (
+    var props = {
+      lineWrapping: true,
+      viewportMargin: Infinity,
+      lineNumbers: true,
 
-      <CodeMirror onChange={this.onEditorTextChange} className={classes}  defaultValue={this.state.text} mode="javascript" lineNumbers={true} />
+      onChange: this.onEditorTextChange,
+      defaultValue: this.state.text,
+    };
+
+    return (
+      <div className={classes} >
+        <code className="left">{"printf("}</code>
+        <div className="mid"><CodeMirror {...props}/></div>
+        <code className="right">{", ...);"}</code>
+      </div>
       );
     }
 });
