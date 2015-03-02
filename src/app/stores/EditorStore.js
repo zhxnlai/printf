@@ -23,6 +23,7 @@ function clone(obj) {
   return result;
 }
 
+// HTML5 storage API
 var SOURCE_KEY = "optSource";
 var storageAvailable = typeof(Storage) !== "undefined";
 
@@ -87,9 +88,7 @@ var EditorStore = assign({}, EventEmitter.prototype, store(), {
     this.removeListener(CHANGE_EVENT, callback);
   },
 
-
 });
-
 
 EditorStore.dispatchToken = AppDispatcher.register(function(payload) {
   var action = payload.action;
@@ -117,7 +116,5 @@ EditorStore.dispatchToken = AppDispatcher.register(function(payload) {
   }
 
 });
-
-
 
 module.exports = EditorStore;

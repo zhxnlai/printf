@@ -16,11 +16,11 @@ function getStateFromStores() {
   };
 }
 
-var blackholeTypes = keyMirror({
+var blackholeNodeTypes = keyMirror({
   number: null,
-  // chars: null,
+  precision_n: null,
+  '(char)*': null
 });
-blackholeTypes['(char)*'] = true;
 
 // A blackhole node is hidden and makes all its descendents hidden too.
 function isBlackhole(traceNode) {
@@ -28,7 +28,7 @@ function isBlackhole(traceNode) {
   if (desc) {
     return desc[desc.length - 1] === '_' ||
            desc === 'space' || desc === 'empty' ||
-           blackholeTypes[desc];
+           blackholeNodeTypes[desc];
   }
   return false;
 }
@@ -55,10 +55,8 @@ function shouldNodeBeVisible(traceNode) {
         return false;
   }
 
-
   return true;
 }
-
 
 var Visualization = React.createClass({
   mixins: [Classable],
@@ -83,27 +81,23 @@ var Visualization = React.createClass({
     this.setState(getStateFromStores());
   },
 
-
   onMouseOverPExpr: function(node, e) {
     // TODO: highlight the source, highlight explanation
-
-    // console.log("over");
-    // console.log(e.target);
-    // console.log(node);
 
     EditorActionCreators.highlightNode(node);
   },
 
   onMouseOutPExpr: function(e) {
     // console.log("out");
-    EditorActionCreators.highlightNode(undefined);
 
+    // Remove marker
+    EditorActionCreators.highlightNode(undefined);
   },
 
   onClickPExpr: function(e) {
-    // TODO: collapse
-
     // console.log("click");
+
+    // TODO: collapse
   },
 
   render: function() {
@@ -133,17 +127,12 @@ var Visualization = React.createClass({
           var shouldShowTrace = showTrace && !isBlackhole(node);
 
           var childNodes = walkTraceNodes(node.children, undefined, undefined, shouldShowTrace);
+          // leaf node
           if (!childNodes.length) {
             var content = node.interval.inputStream.source
                           .substring(node.interval.startIdx, node.interval.endIdx)
                           .split("") // to array
-                          .map(function(char) {
-                            if (char === ' ') {
-                              return <span className="whitespace">{'·'}</span>;
-                            } else {
-                              return char;
-                            }
-                          });
+                          .map(function(char) { return char === ' ' ? <span className="whitespace">{'·'}</span> : char; });
             if (content) {
               childNodes =
                 <div className="inputCharWrapper">
@@ -154,41 +143,41 @@ var Visualization = React.createClass({
           }
 
           if ((shouldShowTrace && shouldNodeBeVisible(node)) || isWhitespace) {
+            // label
             var labelClasses = cx({
               'label': true,
               'prim': node.expr.isPrimitive(),
             });
-            var displayString = node.displayString;
-            if (displayString === "/[\\s]/") {
-              displayString = ' ';
-            }
-
-            var props = {
+            var labelProps = {
               onMouseOver: self.onMouseOverPExpr.bind(self, node),
               onMouseOut: self.onMouseOutPExpr,
               onClick: self.onClickPExpr,
             };
-
-            var label = <div className={labelClasses} {...props}>{displayString}</div>;
+            var displayString = node.displayString;
+            if (displayString === "/[\\s]/") {
+              displayString = ' ';
+            }
+            var label = <div className={labelClasses} {...labelProps}>{displayString}</div>;
+            // children
             var children = <div className="children">{childNodes}</div>;
+            // pexpr
             var pexprClasses = cx({
               'pexpr': true,
               'whitespace': isWhitespace,
             });
-
             return <div className={pexprClasses}>{label}{children}</div>;
           } else {
             return childNodes;
           }
-        }).filter(function(node) {
+        })
+        // filter empty nodes
+        .filter(function(node) {
           var ret = node === undefined || (Array.isArray(node) && node.length === 0);
           return !ret;
         });
       })(trace, undefined, undefined, true);
 
-      // console.log(tree);
-
-      // React.isValidElement
+      // wrap top level nodes, make them line wrappable
       tree = (function transformTopLevelNodes(node) {
         if (React.isValidElement(node)) {
           return <div className="topLevelNode">{node}</div>;
@@ -198,22 +187,10 @@ var Visualization = React.createClass({
           });
         }
       })(tree);
-
-      // tree = (function transformTopLevelNodes(root) {
-      //   if (root.length === 1) {
-      //     return transformTopLevelNodes(root[0]);
-      //   } else {
-      //     // console.log(root.length);
-      //     return root.map(function(topLevelNode) {
-      //       return <div className="topLevelNode">{topLevelNode}</div>;
-      //     });
-      //   }
-      // })(tree);
-
     }
 
     return (
-      <div className="visualizationScrollWrapper">
+      <div className="visualizationScrollWrapper">{/*TODO: no longer needed*/}
         <div className="visualization">
           {tree}
         </div>

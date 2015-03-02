@@ -5,8 +5,7 @@ var assign = require('object-assign');
 var EditorStore = require('../../stores/EditorStore.js');
 var EditorActionCreators = require('../../actions/EditorActionCreators.js');
 
-var Format = require('./Explanations/Format.jsx');
-var Parameter = require('./Explanations/Parameter.jsx');
+var Format = require('./Format.jsx');
 
 function getStateFromStores() {
   return {
@@ -60,7 +59,7 @@ var Explanation = React.createClass({
     node.scrollTop = nTop;
     node.scrollLeft = nLeft;
 
-    // TODO: highlight
+    // TODO: highlight the node
   },
 
   showBookmark: function(sBookmark, bUseHash) {
@@ -101,7 +100,6 @@ var Explanation = React.createClass({
           <h1>Printf Format String</h1>
           <h2>{subtitle}</h2>
           <Format/>
-          {/*<Parameter/>*/}
         </div>
       </div>
       );

@@ -82,13 +82,12 @@ var Input = React.createClass({
 
     return (
       <div className={classes} >
-        <code className="left">{"printf("}</code>
+        <code className="left">{"printf(\""}</code>
         <div className="mid"><CodeMirror ref="codeMirror" {...props}/></div>
-        <code className="right">{", ...);"}</code>
+        <code className="right">{"\", ...);"}</code>
       </div>
       );
     }
 });
-// <CodeMirror onChange={this.onEditorTextChange} value={this.state.editorText} className={"pure-u-1 editor "+this.state.editorClassName} lineNumbers={true} mode="text/x-ocaml" theme='monokai'/>
 
 module.exports = Input;
