@@ -28,7 +28,7 @@ var storageAvailable = typeof(Storage) !== "undefined";
 
 var store = function() {
   var g;
-  var text = 'your name: %s, age: %d';
+  var text = 'your name: %-10s, age: %3$010.3d';
   if(storageAvailable && localStorage.getItem(SOURCE_KEY)) {
     text = localStorage.getItem(SOURCE_KEY);
   }
