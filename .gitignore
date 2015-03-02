@@ -28,3 +28,9 @@ node_modules
 .lock-wscript
 
 build
+
+build/main.css
+
+build/app.js
+
+build/index.html
