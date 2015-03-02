@@ -1,0 +1,108 @@
+var AppDispatcher = require('../dispatcher/AppDispatcher');
+var Constants = require('../constants/Constants');
+var EventEmitter = require('events').EventEmitter;
+var assign = require('object-assign');
+var ohm = require('../libs/ohm.js');
+
+var ActionTypes = Constants.ActionTypes;
+
+var CHANGE_EVENT = 'change';
+
+// Misc Helpers
+// ------------
+String.prototype.splice = function(idx, rem, s) {
+  return (this.slice(0, idx) + s + this.slice(idx + Math.abs(rem)));
+};
+
+function clone(obj) {
+  var result = {};
+  for (var k in obj) {
+    if (obj.hasOwnProperty(k))
+      result[k] = obj[k];
+  }
+  return result;
+}
+
+var SOURCE_KEY = "optSource";
+var storageAvailable = typeof(Storage) !== "undefined";
+
+var store = function() {
+  var g;
+  var text = 'your name: %s, age: %d';
+  if(storageAvailable && localStorage.getItem(SOURCE_KEY)) {
+    text = localStorage.getItem(SOURCE_KEY);
+  }
+
+  return {
+    getText: function() {
+      return text ? text : "";
+    },
+
+    setText: function(value) {
+      text = value;
+      if (storageAvailable) {
+        localStorage.setItem(SOURCE_KEY, value);
+      }
+    },
+
+    getGrammar: function(namespace, domId, grammar) {
+      if (!g) {
+        try {
+          g = ohm.namespace(namespace)
+            .loadGrammarsFromScriptElement(document.getElementById(domId))
+            .grammar(grammar);
+        } catch (err) {
+          g = undefined;
+          console.log(err);
+        }
+      }
+      return g;
+    },
+  };
+};
+
+var EditorStore = assign({}, EventEmitter.prototype, store(), {
+
+  emitChange: function() {
+    this.emit(CHANGE_EVENT);
+  },
+
+  /**
+   * @param {function} callback
+   */
+  addChangeListener: function(callback) {
+    this.on(CHANGE_EVENT, callback);
+  },
+
+  removeChangeListener: function(callback) {
+    this.removeListener(CHANGE_EVENT, callback);
+  },
+
+
+});
+
+
+EditorStore.dispatchToken = AppDispatcher.register(function(payload) {
+  var action = payload.action;
+  switch (action.type) {
+    case ActionTypes.DID_MOUNT:
+      var g = EditorStore.getGrammar('demo', 'arithmetic', 'MyLang');
+      EditorStore.emitChange();
+      break;
+
+    case ActionTypes.TEXT_CHANGE:
+      var value = action.value;
+      EditorStore.setText(value);
+      EditorStore.emitChange();
+      break;
+
+    default:
+      console.log(action.type);
+      break;
+  }
+
+});
+
+
+
+module.exports = EditorStore;

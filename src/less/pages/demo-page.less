@@ -1,0 +1,170 @@
+.demo-page {
+  // margin: 8px;
+
+  // width: 100vw;
+
+  .editor {
+    width: 100%;
+    height: 300px;
+  }
+
+  .visualizationScrollWrapper {
+    width: 100%; 
+    overflow: scroll;
+
+  }
+  .visualization {
+    // margin-top: 30px;
+    // position: relative;
+
+    // prevent inline-block from wrapping
+    // white-space: nowrap;
+
+    .topLevelNode {
+      margin-top: 30px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .inputCharWrapper {
+      margin: auto;
+      overflow: visible;
+
+      .placeholder {
+        .inputFont;
+        visibility: hidden;
+      }
+      .inputChar {
+        .inputFont;
+
+        // transform: translateX(-50%);
+
+        position: absolute;
+        top: -20px;
+
+        text-align: center;
+        overflow: visible;
+        // z-index: 10;
+      }
+    }
+
+  }
+
+  .inputFont {
+    .input;
+    font-size: 15px;
+  }
+
+  #input {
+    box-sizing: border-box;
+    font-size: 100%;
+    margin-bottom: 1px;
+    outline: none;
+    padding: 8px 0 10px 0;
+  }
+  #input .highlight {
+    background-color: #B5D5FF;
+  }
+  .pexpr {
+    // align the top edge
+    vertical-align: top;
+
+    cursor: pointer;
+    color: #333;
+    display: inline-block;
+    flex-grow: 1;
+    font-family: Monaco, Menlo, sans-serif;
+    font-size: 9px;
+    // overflow: hidden;
+    white-space: nowrap;
+  }
+  .pexpr + .pexpr {
+    margin-left: 1px;
+  }
+  .pexpr.failed > .label {
+    background-color: rgba(219, 82, 75, 0.6);
+    border-right: 1px solid rgb(219, 82, 75);
+    border-left: 1px solid rgb(219, 82, 75);
+  }
+  .pexpr > .label {
+    background-color: #efefef;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    box-sizing: border-box;
+    display: block;
+    margin: 1px 0;
+    padding: 1px 2px 0 2px;
+    position: relative;
+    text-align: center;
+  }
+  .pexpr > .label:hover {
+    background-color: #dfdfdf;
+  }
+  .pexpr > .label.prim {
+    background-color: transparent;
+    border-left: none;
+    border-right: none;
+    color: SeaGreen;
+  }
+  .pexpr > .children {
+    display: flex;
+  }
+  .pexpr > .children[hidden] {
+    display: none;
+  }
+  // textarea, .CodeMirror {
+  //   display: none;
+  // }
+  .highlightRule {
+    background-color: #B5D5FF;
+  }
+  .highlightApplication {
+    background-color: CornflowerBlue;
+    color: white;
+  }
+
+  #options {
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+    padding: 2px 6px 1px 6px;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+  #options label {
+    position: relative;
+    top: 1px;
+  }
+  #options input[type=checkbox] {
+    position: relative;
+    top: -1px;
+  }
+  .input {
+    font-family: Monaco, Menlo, sans-serif;
+  }
+  #input, #input span {
+    display: inline-block;
+    text-align: center;
+    white-space: pre;
+  }
+  #measuringDiv {
+    height: auto;
+    position: absolute;
+    visibility: hidden;
+    white-space: nowrap;
+    width: auto;
+  }
+  .whitespace {
+    color: #ccc;
+  }
+  .pexpr.whitespace {
+    height: 0;
+  }
+  .pexpr.whitespace .prim {
+    /* HACK! This is not the right way to deal with whitespace. */
+    width: 10px;
+  }
+
+
+}
