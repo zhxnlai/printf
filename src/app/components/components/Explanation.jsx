@@ -7,7 +7,7 @@ var EditorActionCreators = require('../../actions/EditorActionCreators.js');
 
 function getStateFromStores() {
   return {
-    text : EditorStore.getText(),
+    highlightedNode : EditorStore.getHighlightedNode(),
   };
 }
 
@@ -16,6 +16,21 @@ var Explanation = React.createClass({
 
   getInitialState: function() {
     return getStateFromStores();
+  },
+
+  componentDidMount: function() {
+    EditorStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount: function() {
+    EditorStore.removeChangeListener(this._onChange);
+  },
+
+  /**
+   * Event handler for 'change' events coming from the stores
+   */
+  _onChange: function() {
+    this.setState(getStateFromStores());
   },
 
   propTypes: {
@@ -27,11 +42,13 @@ var Explanation = React.createClass({
   },
 
   render: function() {
-    var classes = this.getClasses('editor', {
+    var classes = this.getClasses('explanation', {
     });
 
+    console.log(this.state.highlightedNode);
+
     return (
-      <div>
+      <div className={classes}>
         <h1>Explanation</h1>
       </div>
       );

@@ -21,6 +21,8 @@ module.exports = {
 
     TEXT_CHANGE: null,
 
+    HIGHLIGHT_NODE: null,
+
   }),
 
 

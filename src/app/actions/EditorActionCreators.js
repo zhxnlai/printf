@@ -17,4 +17,12 @@ module.exports = {
       value: value
     });
   },
+
+  highlightNode: function(node) {
+    AppDispatcher.handleViewAction({
+      type: ActionTypes.HIGHLIGHT_NODE,
+      node: node
+    });
+  },
+
 };

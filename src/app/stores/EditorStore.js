@@ -32,8 +32,17 @@ var store = function() {
   if(storageAvailable && localStorage.getItem(SOURCE_KEY)) {
     text = localStorage.getItem(SOURCE_KEY);
   }
+  var highlightedNode;
 
   return {
+    getHighlightedNode: function() {
+      return highlightedNode;
+    },
+    highlightNode: function(node) {
+      highlightedNode = clone(node);
+      // console.log(highlightedNode);
+    },
+
     getText: function() {
       return text ? text : "";
     },
@@ -93,6 +102,12 @@ EditorStore.dispatchToken = AppDispatcher.register(function(payload) {
     case ActionTypes.TEXT_CHANGE:
       var value = action.value;
       EditorStore.setText(value);
+      EditorStore.emitChange();
+      break;
+
+    case ActionTypes.HIGHLIGHT_NODE:
+      var node = action.node;
+      EditorStore.highlightNode(node);
       EditorStore.emitChange();
       break;
 

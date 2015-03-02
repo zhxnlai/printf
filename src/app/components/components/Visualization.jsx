@@ -84,16 +84,26 @@ var Visualization = React.createClass({
   },
 
 
-  onMouseOverPExpr: function(e) {
-    console.log("over");
+  onMouseOverPExpr: function(node, e) {
+    // TODO: highlight the source, highlight explanation
+
+    // console.log("over");
+    // console.log(e.target);
+    // console.log(node);
+
+    EditorActionCreators.highlightNode(node);
   },
 
   onMouseOutPExpr: function(e) {
-    console.log("out");
+    // console.log("out");
+    EditorActionCreators.highlightNode(undefined);
+
   },
 
   onClickPExpr: function(e) {
-    console.log("click");
+    // TODO: collapse
+
+    // console.log("click");
   },
 
   render: function() {
@@ -152,19 +162,21 @@ var Visualization = React.createClass({
             if (displayString === "/[\\s]/") {
               displayString = ' ';
             }
-            var label = <div className={labelClasses}>{displayString}</div>;
+
+            var props = {
+              onMouseOver: self.onMouseOverPExpr.bind(self, node),
+              onMouseOut: self.onMouseOutPExpr,
+              onClick: self.onClickPExpr,
+            };
+
+            var label = <div className={labelClasses} {...props}>{displayString}</div>;
             var children = <div className="children">{childNodes}</div>;
             var pexprClasses = cx({
               'pexpr': true,
               'whitespace': isWhitespace,
             });
-            // console.log(this.onMouseOverPExpr);
-            var props = {
-              onMouseOver: self.onMouseOverPExpr,
-              onMouseOut: self.onMouseOutPExpr,
-              onClick: self.onClickPExpr
-            };
-            return <div className={pexprClasses} {...props}>{label}{children}</div>;
+
+            return <div className={pexprClasses}>{label}{children}</div>;
           } else {
             return childNodes;
           }
