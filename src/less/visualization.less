@@ -10,7 +10,13 @@
   // prevent inline-block from wrapping
   // white-space: nowrap;
 
+  display: -webkit-flex;
   display: flex;
+
+  -webkit-flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  -webkit-justify-content:  space-around;
+
   flex-direction: row;
   flex-wrap: wrap;
   justify-content:  space-around;
@@ -18,6 +24,7 @@
   .topLevelNode {
     margin-top: 30px;
     position: relative;
+    -webkit-flex: 0 1 auto;
     flex: 0 1 auto;
   }
 
@@ -103,6 +110,7 @@
   color: SeaGreen;
 }
 .pexpr > .children {
+  display: -webkit-flex;
   display: flex;
 }
 .pexpr > .children[hidden] {
