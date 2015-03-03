@@ -198,17 +198,22 @@ var Visualization = React.createClass({
                           .map(function(char) { return char === ' ' ? <span className="whitespace">{'·'}</span> : char; });
             if (content && content.length>0) {
               var shouldHighlight = false;
+              var shouldDim = false;
               if (self.state.highlightedNode) {
                 var highlightedInterval = self.state.highlightedNode.interval;
-                if (highlightedInterval &&
-                    node.interval.startIdx >= highlightedInterval.startIdx &&
-                    node.interval.endIdx <= highlightedInterval.endIdx) {
-                    shouldHighlight = true;
+                if (highlightedInterval) {
+                  if (node.interval.startIdx >= highlightedInterval.startIdx &&
+                     node.interval.endIdx <= highlightedInterval.endIdx) {
+                   shouldHighlight = true;
+                 } else {
+                   shouldDim = true;
+                 }
                 }
               }
               var inputCharClasses = cx({
                 'inputChar': true,
-                'highlightRule': shouldHighlight,
+                // 'highlightRule': shouldHighlight,
+                'dimRule': shouldDim,
               });
               childNodes =
                 <div className="inputCharWrapper">
