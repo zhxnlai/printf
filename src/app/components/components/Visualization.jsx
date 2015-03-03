@@ -13,6 +13,7 @@ function getStateFromStores() {
   return {
     text : EditorStore.getText(),
     grammar : EditorStore.getGrammar(),
+    highlightedNode : EditorStore.getHighlightedNode(),
   };
 }
 
@@ -94,10 +95,12 @@ var Visualization = React.createClass({
     EditorActionCreators.highlightNode(undefined);
   },
 
-  onClickPExpr: function(e) {
+  onClickPExpr: function(node, e) {
     // console.log("click");
 
     // TODO: collapse
+    console.log(node);
+    console.log(this.state.highlightedNode);
   },
 
   render: function() {
@@ -134,10 +137,23 @@ var Visualization = React.createClass({
                           .split("") // to array
                           .map(function(char) { return char === ' ' ? <span className="whitespace">{'·'}</span> : char; });
             if (content) {
+              var shouldHighlight = false;
+              if (self.state.highlightedNode) {
+                var highlightedInterval = self.state.highlightedNode.interval;
+                if (highlightedInterval &&
+                    node.interval.startIdx >= highlightedInterval.startIdx &&
+                    node.interval.endIdx <= highlightedInterval.endIdx) {
+                    shouldHighlight = true;
+                }
+              }
+              var inputCharClasses = cx({
+                'inputChar': true,
+                'highlightRule': shouldHighlight,
+              });
               childNodes =
                 <div className="inputCharWrapper">
                   <div className="placeholder">{content}</div>
-                  <div className="inputChar">{content}</div>
+                  <div className={inputCharClasses}>{content}</div>
                 </div>;
             }
           }
@@ -151,7 +167,7 @@ var Visualization = React.createClass({
             var labelProps = {
               onMouseOver: self.onMouseOverPExpr.bind(self, node),
               onMouseOut: self.onMouseOutPExpr,
-              onClick: self.onClickPExpr,
+              onClick: self.onClickPExpr.bind(self, node),
             };
             var displayString = node.displayString;
             if (displayString === "/[\\s]/") {
