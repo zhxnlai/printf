@@ -34,6 +34,7 @@ var store = function() {
     text = localStorage.getItem(SOURCE_KEY);
   }
   var highlightedNode;
+  var highlightedTopLevelNode;
 
   return {
     getHighlightedNode: function() {
@@ -42,6 +43,13 @@ var store = function() {
     highlightNode: function(node) {
       highlightedNode = clone(node);
       // console.log(highlightedNode);
+    },
+
+    getHighlightedTopLevelNode: function() {
+      return highlightedTopLevelNode;
+    },
+    highlightTopLevelNode: function(node) {
+      highlightedTopLevelNode = clone(node);
     },
 
     getText: function() {
@@ -107,6 +115,12 @@ EditorStore.dispatchToken = AppDispatcher.register(function(payload) {
     case ActionTypes.HIGHLIGHT_NODE:
       var node = action.node;
       EditorStore.highlightNode(node);
+      EditorStore.emitChange();
+      break;
+
+    case ActionTypes.HIGHLIGHT_TOP_LEVEL_NODE:
+      var node = action.node;
+      EditorStore.highlightTopLevelNode(node);
       EditorStore.emitChange();
       break;
 

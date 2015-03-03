@@ -25,4 +25,11 @@ module.exports = {
     });
   },
 
+  highlightTopLevelNode: function(node) {
+    AppDispatcher.handleViewAction({
+      type: ActionTypes.HIGHLIGHT_TOP_LEVEL_NODE,
+      node: node
+    });
+  },
+
 };

@@ -15,17 +15,21 @@
 
   -webkit-flex-direction: row;
   -webkit-flex-wrap: wrap;
-  -webkit-justify-content:  space-around;
+  // -webkit-justify-content:  space-around;
 
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content:  space-around;
+  // justify-content:  space-around;
 
   .topLevelNode {
     margin-top: 30px;
     position: relative;
     -webkit-flex: 0 1 auto;
     flex: 0 1 auto;
+  }
+
+  .topLevelNode + .topLevelNode {
+    margin-left: 0.5em;
   }
 
   .inputCharWrapper {

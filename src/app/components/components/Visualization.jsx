@@ -3,6 +3,8 @@ var assign = require('object-assign');
 var ohm = require('../../libs/ohm.js');
 var keyMirror = require('keymirror');
 var cx = React.addons.classSet;
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+// <ReactCSSTransitionGroup transitionName="example"></ReactCSSTransitionGroup>
 
 var Classable = require('../../mixins/classable.js');
 // var WindowListenable = require('../../mixins/window-listenable.js');
@@ -14,6 +16,7 @@ function getStateFromStores() {
     text : EditorStore.getText(),
     grammar : EditorStore.getGrammar(),
     highlightedNode : EditorStore.getHighlightedNode(),
+    highlightedTopLevelNode : EditorStore.getHighlightedTopLevelNode(),
   };
 }
 
@@ -42,6 +45,22 @@ function shouldNodeBeVisible(traceNode) {
     return false;
   }
 
+  if (this.state.highlightedTopLevelNode) {
+    var highlightedInterval = this.state.highlightedTopLevelNode.interval;
+    if (highlightedInterval &&
+      traceNode.interval.startIdx >= highlightedInterval.startIdx &&
+        traceNode.interval.endIdx <= highlightedInterval.endIdx) {
+    } else {
+      if (traceNode.interval && traceNode.interval.startIdx === traceNode.interval.endIdx) {
+        return false;
+      }
+    }
+  } else {
+    if (traceNode.interval && traceNode.interval.startIdx === traceNode.interval.endIdx) {
+      return false;
+    }
+  }
+
   switch (traceNode.expr.constructor.name) {
     case 'Alt':
     case 'Seq':
@@ -58,6 +77,8 @@ function shouldNodeBeVisible(traceNode) {
 
   return true;
 }
+
+var topLevelNodeMouseEventDelay = 100;
 
 var Visualization = React.createClass({
   mixins: [Classable],
@@ -83,24 +104,31 @@ var Visualization = React.createClass({
   },
 
   onMouseOverPExpr: function(node, e) {
-    // TODO: highlight the source, highlight explanation
-
     EditorActionCreators.highlightNode(node);
   },
 
   onMouseOutPExpr: function(e) {
-    // console.log("out");
-
     // Remove marker
     EditorActionCreators.highlightNode(undefined);
   },
 
-  onClickPExpr: function(node, e) {
-    // console.log("click");
+  onMouseOverTopLevelPExpr: function(node, e) {
+    if (this.lastTimeoutIDEnter) {
+      window.clearTimeout(this.lastTimeoutIDEnter);
+    }
+    this.lastTimeoutIDEnter = window.setTimeout(function(){EditorActionCreators.highlightTopLevelNode(node);}, topLevelNodeMouseEventDelay);
+  },
 
+  onMouseOutTopLevelPExpr: function(e) {
+    if (this.lastTimeoutIDLeave) {
+      window.clearTimeout(this.lastTimeoutIDLeave);
+    }
+    this.lastTimeoutIDLeave = window.setTimeout(function(){EditorActionCreators.highlightTopLevelNode(undefined);}, topLevelNodeMouseEventDelay);
+  },
+
+  onClickPExpr: function(node, e) {
     // TODO: collapse
     console.log(node);
-    console.log(this.state.highlightedNode);
   },
 
   render: function() {
@@ -136,7 +164,7 @@ var Visualization = React.createClass({
                           .substring(node.interval.startIdx, node.interval.endIdx)
                           .split("") // to array
                           .map(function(char) { return char === ' ' ? <span className="whitespace">{'·'}</span> : char; });
-            if (content) {
+            if (content && content.length>0) {
               var shouldHighlight = false;
               if (self.state.highlightedNode) {
                 var highlightedInterval = self.state.highlightedNode.interval;
@@ -158,15 +186,15 @@ var Visualization = React.createClass({
             }
           }
 
-          if ((shouldShowTrace && shouldNodeBeVisible(node)) || isWhitespace) {
+          if ((shouldShowTrace && shouldNodeBeVisible.bind(self)(node)) || isWhitespace) {
             // label
             var labelClasses = cx({
               'label': true,
               'prim': node.expr.isPrimitive(),
             });
             var labelProps = {
-              onMouseOver: self.onMouseOverPExpr.bind(self, node),
-              onMouseOut: self.onMouseOutPExpr,
+              onMouseEnter: self.onMouseOverPExpr.bind(self, node),
+              onMouseLeave: self.onMouseOutPExpr,
               onClick: self.onClickPExpr.bind(self, node),
             };
             var displayString = node.displayString;
@@ -181,7 +209,10 @@ var Visualization = React.createClass({
               'pexpr': true,
               'whitespace': isWhitespace,
             });
-            return <div className={pexprClasses}>{label}{children}</div>;
+            var pexprProps = {
+              node: node,
+            };
+            return <div className={pexprClasses} {...pexprProps}>{label}{children}</div>;
           } else {
             return childNodes;
           }
@@ -196,7 +227,11 @@ var Visualization = React.createClass({
       // wrap top level nodes, make them line wrappable
       tree = (function transformTopLevelNodes(node) {
         if (React.isValidElement(node)) {
-          return <div className="topLevelNode">{node}</div>;
+          var topLevelNodeProps = {
+            onMouseEnter: self.onMouseOverTopLevelPExpr.bind(self, node.props.node),
+            onMouseLeave: self.onMouseOutTopLevelPExpr,
+          };
+          return <div className="topLevelNode" {...topLevelNodeProps}>{node}</div>;
         } else {
           return node.map(function(subnode) {
             return transformTopLevelNodes(subnode);
