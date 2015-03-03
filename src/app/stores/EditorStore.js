@@ -36,6 +36,8 @@ var store = function() {
   var highlightedNode;
   var highlightedTopLevelNode;
 
+  var cursorIndex;
+
   return {
     getHighlightedNode: function() {
       return highlightedNode;
@@ -50,6 +52,14 @@ var store = function() {
     },
     highlightTopLevelNode: function(node) {
       highlightedTopLevelNode = clone(node);
+    },
+
+    getCursorIndex: function() {
+      return cursorIndex;
+    },
+    setCursorIndex: function(index) {
+      cursorIndex = index;
+      console.log(cursorIndex);
     },
 
     getText: function() {
@@ -121,6 +131,12 @@ EditorStore.dispatchToken = AppDispatcher.register(function(payload) {
     case ActionTypes.HIGHLIGHT_TOP_LEVEL_NODE:
       var node = action.node;
       EditorStore.highlightTopLevelNode(node);
+      EditorStore.emitChange();
+      break;
+
+    case ActionTypes.CHANGE_CURSOR_INDEX:
+      var idx = action.index;
+      EditorStore.setCursorIndex(idx);
       EditorStore.emitChange();
       break;
 

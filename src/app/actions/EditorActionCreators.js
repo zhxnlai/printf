@@ -32,4 +32,11 @@ module.exports = {
     });
   },
 
+  changeCursorIndex: function(index) {
+    AppDispatcher.handleViewAction({
+      type: ActionTypes.CHANGE_CURSOR_INDEX,
+      index: index
+    });
+  },
+
 };

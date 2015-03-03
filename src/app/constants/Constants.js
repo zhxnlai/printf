@@ -22,8 +22,10 @@ module.exports = {
     TEXT_CHANGE: null,
 
     HIGHLIGHT_NODE: null,
-    
+
     HIGHLIGHT_TOP_LEVEL_NODE: null,
+    
+    CHANGE_CURSOR_INDEX: null,
 
   }),
 

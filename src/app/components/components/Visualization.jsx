@@ -17,6 +17,7 @@ function getStateFromStores() {
     grammar : EditorStore.getGrammar(),
     highlightedNode : EditorStore.getHighlightedNode(),
     highlightedTopLevelNode : EditorStore.getHighlightedTopLevelNode(),
+    cursorIndex: EditorStore.getCursorIndex(),
   };
 }
 
@@ -28,13 +29,41 @@ var blackholeNodeTypes = keyMirror({
 
 // A blackhole node is hidden and makes all its descendents hidden too.
 function isBlackhole(traceNode) {
+
   var desc = traceNode.displayString;
   if (desc) {
-    return desc[desc.length - 1] === '_' ||
+    if (desc[desc.length - 1] === '_' ||
            desc === 'space' || desc === 'empty' ||
-           blackholeNodeTypes[desc];
+           blackholeNodeTypes[desc]) {
+      return true;
+    }
+    if (desc === "chars" && traceNode.interval && traceNode.interval.startIdx === traceNode.interval.endIdx) {
+      return true;
+    }
   }
-  return false;
+
+
+
+  var ret = false;
+
+  if (traceNode.interval) {
+    if (traceNode.interval.startIdx === traceNode.interval.endIdx) {
+      ret = true;
+    }
+
+    [this.state.highlightedTopLevelNode, this.state.cursorHighlightedTopLevelNode].forEach(function(topLevelNode) {
+      if (topLevelNode) {
+        var highlightedInterval = topLevelNode.interval;
+        if (highlightedInterval &&
+          traceNode.interval.startIdx >= highlightedInterval.startIdx &&
+            traceNode.interval.endIdx <= highlightedInterval.endIdx) {
+          ret = false;
+        }
+      }
+    });
+  }
+
+  return ret;
 }
 
 function shouldNodeBeVisible(traceNode) {
@@ -43,22 +72,6 @@ function shouldNodeBeVisible(traceNode) {
 
   if (traceNode.displayString === "(format chars)*") {
     return false;
-  }
-
-  if (this.state.highlightedTopLevelNode) {
-    var highlightedInterval = this.state.highlightedTopLevelNode.interval;
-    if (highlightedInterval &&
-      traceNode.interval.startIdx >= highlightedInterval.startIdx &&
-        traceNode.interval.endIdx <= highlightedInterval.endIdx) {
-    } else {
-      if (traceNode.interval && traceNode.interval.startIdx === traceNode.interval.endIdx) {
-        return false;
-      }
-    }
-  } else {
-    if (traceNode.interval && traceNode.interval.startIdx === traceNode.interval.endIdx) {
-      return false;
-    }
   }
 
   switch (traceNode.expr.constructor.name) {
@@ -77,8 +90,6 @@ function shouldNodeBeVisible(traceNode) {
 
   return true;
 }
-
-var topLevelNodeMouseEventDelay = 100;
 
 var Visualization = React.createClass({
   mixins: [Classable],
@@ -100,7 +111,21 @@ var Visualization = React.createClass({
    * Event handler for 'change' events coming from the stores
    */
   _onChange: function() {
-    this.setState(getStateFromStores());
+    var newState = getStateFromStores();
+
+    newState.cursorHighlightedTopLevelNode = undefined;
+    React.Children.forEach(this.refs.topLevelNodeWrapper.props.children, function(child) {
+      var node = child.props.node;
+      var cursorIdx = newState.cursorIndex;
+      if (cursorIdx !== undefined) {
+        if (node.interval.startIdx <= cursorIdx &&
+            cursorIdx <= node.interval.endIdx ) {
+          newState.cursorHighlightedTopLevelNode = node;
+        }
+      }
+    });
+
+    this.setState(newState);
   },
 
   onMouseOverPExpr: function(node, e) {
@@ -113,17 +138,23 @@ var Visualization = React.createClass({
   },
 
   onMouseOverTopLevelPExpr: function(node, e) {
-    if (this.lastTimeoutIDEnter) {
-      window.clearTimeout(this.lastTimeoutIDEnter);
+    // if (this.lastTimeoutIDEnter) {
+    //   window.clearTimeout(this.lastTimeoutIDEnter);
+    // }
+    //
+    // this.lastTimeoutIDEnter = window.setTimeout(function(){EditorActionCreators.highlightTopLevelNode(node);}, 100);
+    if (this.lastTimeoutIDLeave) {
+      window.clearTimeout(this.lastTimeoutIDLeave);
     }
-    this.lastTimeoutIDEnter = window.setTimeout(function(){EditorActionCreators.highlightTopLevelNode(node);}, topLevelNodeMouseEventDelay);
+    EditorActionCreators.highlightTopLevelNode(node);
   },
 
   onMouseOutTopLevelPExpr: function(e) {
     if (this.lastTimeoutIDLeave) {
       window.clearTimeout(this.lastTimeoutIDLeave);
     }
-    this.lastTimeoutIDLeave = window.setTimeout(function(){EditorActionCreators.highlightTopLevelNode(undefined);}, topLevelNodeMouseEventDelay);
+    this.lastTimeoutIDLeave = window.setTimeout(function(){EditorActionCreators.highlightTopLevelNode(undefined);}, 750);
+    // EditorActionCreators.highlightTopLevelNode(undefined);
   },
 
   onClickPExpr: function(node, e) {
@@ -155,7 +186,7 @@ var Visualization = React.createClass({
           var contents = node.expr.isPrimitive() ? node.interval.contents : '';
           var isWhitespace = contents.length > 0 && contents.trim().length === 0;
 
-          var shouldShowTrace = showTrace && !isBlackhole(node);
+          var shouldShowTrace = showTrace && !isBlackhole.bind(self)(node);
 
           var childNodes = walkTraceNodes(node.children, undefined, undefined, shouldShowTrace);
           // leaf node
@@ -230,6 +261,7 @@ var Visualization = React.createClass({
           var topLevelNodeProps = {
             onMouseEnter: self.onMouseOverTopLevelPExpr.bind(self, node.props.node),
             onMouseLeave: self.onMouseOutTopLevelPExpr,
+            node: node.props.node
           };
           return <div className="topLevelNode" {...topLevelNodeProps}>{node}</div>;
         } else {
@@ -242,7 +274,7 @@ var Visualization = React.createClass({
 
     return (
       <div className="visualizationScrollWrapper">{/*TODO: no longer needed*/}
-        <div className="visualization">
+        <div ref="topLevelNodeWrapper" className="visualization">
           {tree}
         </div>
       </div>
