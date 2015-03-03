@@ -60,6 +60,8 @@ var Explanation = React.createClass({
     node.scrollLeft = nLeft;
 
     // TODO: highlight the node
+    oNode.classList.add("highlightRule");
+    this.lastHighlightedNode = oNode;
   },
 
   showBookmark: function(sBookmark, bUseHash) {
@@ -76,6 +78,10 @@ var Explanation = React.createClass({
 
   componentDidUpdate: function() {
     if (this.state.highlightedNode) {
+      if (this.lastHighlightedNode) {
+        this.lastHighlightedNode.classList.remove("highlightRule");
+      }
+
       var displayString = this.state.highlightedNode.displayString;
       var elementId = displayNameToId[displayString] ? displayNameToId[displayString]
                                                      : displayString;
