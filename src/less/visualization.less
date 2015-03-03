@@ -26,31 +26,31 @@
     position: relative;
     -webkit-flex: 0 1 auto;
     flex: 0 1 auto;
-  }
-
-  .topLevelNode + .topLevelNode {
-    margin-left: 0.5em;
+    margin-right: 0.5em;
   }
 
   .inputCharWrapper {
     margin: auto;
     overflow: visible;
     height: 0;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    text-align: center;
 
     .placeholder {
       .inputFont;
+      display: inline-block;
       visibility: hidden;
     }
     .inputChar {
       .inputFont;
-
-      // transform: translateX(-50%);
-
       position: absolute;
       top: -20px;
 
-      text-align: center;
-      overflow: visible;
+      visibility: visible;
+      // transform: translateX(-50%);
+      // text-align: center;
+      // overflow: visible;
       // z-index: 10;
     }
   }

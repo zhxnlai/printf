@@ -23,6 +23,7 @@ function getStateFromStores() {
 
 var blackholeNodeTypes = keyMirror({
   number: null,
+  // "digit+": null,
   precision_n: null,
   '(char)*': null
 });
@@ -190,7 +191,7 @@ var Visualization = React.createClass({
 
           var childNodes = walkTraceNodes(node.children, undefined, undefined, shouldShowTrace);
           // leaf node
-          if (!childNodes.length) {
+          if (childNodes.length === 0) {
             var content = node.interval.inputStream.source
                           .substring(node.interval.startIdx, node.interval.endIdx)
                           .split("") // to array
@@ -211,8 +212,9 @@ var Visualization = React.createClass({
               });
               childNodes =
                 <div className="inputCharWrapper">
-                  <div className="placeholder">{content}</div>
-                  <div className={inputCharClasses}>{content}</div>
+                  <div className="placeholder">{content}
+                    <div className={inputCharClasses}>{content}</div>
+                  </div>
                 </div>;
             }
           }
