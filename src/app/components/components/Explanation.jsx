@@ -72,6 +72,10 @@ var Explanation = React.createClass({
     // var oBookmark = this.getDOMNode().querySelector(sBookmark);
     var oBookmark = document.getElementById(sBookmark);
     if (oBookmark) {
+        // special treatment for <td/>
+        if (oBookmark.parentNode.tagName === "TD") {
+          oBookmark = oBookmark.parentNode;
+        }
         this.showNode(oBookmark);
     }
   },

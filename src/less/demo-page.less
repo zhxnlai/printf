@@ -8,16 +8,16 @@
   display: flex;
 
   .leftPanel {
-    -webkit-flex: 2;
-            flex: 2;
+    -webkit-flex: 3;
+            flex: 3;
 
     height: 100%;
     overflow-y: scroll;
   }
 
   .rightPanel {
-    -webkit-flex: 1;
-            flex: 1;
+    -webkit-flex: 2;
+            flex: 2;
 
     height: 100%;
   }
@@ -29,5 +29,21 @@
   .visualization {
     margin: 1em;
   }
+
+}
+
+@media all and (max-width: 1000px) {
+
+ .demo-page {
+   .leftPanel {
+     -webkit-flex: 1;
+             flex: 1;
+   }
+
+   .rightPanel {
+     -webkit-flex: 1;
+             flex: 1;
+   }
+ }
 
 }
