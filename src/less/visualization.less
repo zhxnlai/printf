@@ -4,6 +4,8 @@
 
 }
 .visualization {
+  * { .ease-out(); }
+
   // margin-top: 30px;
   // position: relative;
 
@@ -27,6 +29,10 @@
     -webkit-flex: 0 1 auto;
     flex: 0 1 auto;
     margin-right: 0.5em;
+
+    // -webkit-flex: 1 0 auto;
+    // -webkit-transition: -webkit-flex 250ms linear;
+    // transition: flex 250ms linear;
   }
 
   .inputCharWrapper {
@@ -73,6 +79,9 @@
   background-color: #B5D5FF;
 }
 .pexpr {
+
+
+
   // align the top edge
   vertical-align: top;
 
@@ -85,41 +94,51 @@
   font-size: 9px;
   // overflow: hidden;
   white-space: nowrap;
+
+  .pexpr.failed > .label {
+    background-color: rgba(219, 82, 75, 0.6);
+    border-right: 1px solid rgb(219, 82, 75);
+    border-left: 1px solid rgb(219, 82, 75);
+  }
+  .label {
+    background-color: #efefef;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    box-sizing: border-box;
+    display: block;
+    margin: 1px 0;
+    padding: 1px 2px 0 2px;
+    position: relative;
+    text-align: center;
+  }
+  .label:hover {
+    background-color: #dfdfdf;
+  }
+  .label.prim {
+    background-color: transparent;
+    border-left: none;
+    border-right: none;
+    color: SeaGreen;
+  }
+  .children {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex: 1;
+    flex: 1;
+  }
+  .children[hidden] {
+    display: none;
+  }
+  .childrenCSSTransitionGroup {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex: 1;
+    flex: 1;
+  }
 }
+
 .pexpr + .pexpr {
   margin-left: 1px;
-}
-.pexpr.failed > .label {
-  background-color: rgba(219, 82, 75, 0.6);
-  border-right: 1px solid rgb(219, 82, 75);
-  border-left: 1px solid rgb(219, 82, 75);
-}
-.pexpr > .label {
-  background-color: #efefef;
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #ccc;
-  box-sizing: border-box;
-  display: block;
-  margin: 1px 0;
-  padding: 1px 2px 0 2px;
-  position: relative;
-  text-align: center;
-}
-.pexpr > .label:hover {
-  background-color: #dfdfdf;
-}
-.pexpr > .label.prim {
-  background-color: transparent;
-  border-left: none;
-  border-right: none;
-  color: SeaGreen;
-}
-.pexpr > .children {
-  display: -webkit-flex;
-  display: flex;
-}
-.pexpr > .children[hidden] {
-  display: none;
 }
 // textarea, .CodeMirror {
 //   display: none;

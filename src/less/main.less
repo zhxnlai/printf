@@ -17,6 +17,9 @@
 // for explanation styling
 @import (less) "github-markdown.css";
 
+// @import (less) "animations.css";
+
+
 @import (less) "../../node_modules/codemirror/lib/codemirror.css";
 @import (less) "../../node_modules/codemirror/theme/monokai.css";
 
@@ -24,37 +27,41 @@ body {
   margin: 0;
 }
 
-// CSSTransition
-.example-enter {
-  position: absolute;
-  opacity: 0.3;
+@widthDuration: 0.1s;
 
-  transition-duration: 0.3s;
-  transition-property: opacity;
-  transition-timing-function: ease;
-  // -webkit-transform: translate3d(0,-100%,0);
-  // z-index: 100;
+.example-enter {
+  width: 0px;
+  transition: width @widthDuration ease-out;
 }
 
 .example-enter.example-enter-active {
-  // -webkit-transform: translate3d(0,0,0);
-  opacity: 1;
+  width: 50px;
 }
 
 .example-leave {
-  position: absolute;
-
-  transition-duration: .3s;
-  transition-property: opacity;
-  transition-timing-function: ease;
-  -webkit-transform: translate3d(0,0,0);
-  opacity: 1;
+  width: 50px;
+  transition: width @widthDuration ease-out;
 }
 
 .example-leave.example-leave-active {
-  // -webkit-transform: translate3d(0,15%,0);
-  opacity: 0.01;
-  // opacity: 0.01;
-  // transform: translateY(-100%);
-  // animation: transform .6s  ease ;
+  width: 0px;
+}
+
+@ease-out-function: cubic-bezier(0.23, 1, 0.32, 1);
+
+.ease-out(@duration: 450ms; @property: all; @delay: 0ms) {
+  transition: @property @duration @ease-out-function @delay;
+  -webkit-transition: @property @duration @ease-out-function @delay;
+}
+
+.pulsate(@animation-name; @start-size: 0.75; @end-size: 1; @duration: 1.5s) {
+  @keyframes ~"@{animation-name}" {
+    0%, 100% {
+      transform: scale(@start-size);
+    }
+    50% {
+      transform: scale(@end-size);
+    }
+  }
+  animation: @animation-name @duration ease 0s infinite;
 }

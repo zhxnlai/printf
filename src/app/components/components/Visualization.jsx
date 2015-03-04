@@ -179,9 +179,11 @@ var Visualization = React.createClass({
         trace = e.state.trace;
       }
 
+      var inputCharWrapperCount = 0;
+      var formatPExprCount = 0;
       var self = this;
       tree = (function walkTraceNodes(nodes, container, inputContainer, showTrace) {
-        return nodes.map(function(node) {
+        return nodes.map(function(node, i) {
           if (!node.succeeded) return;  // TODO: Allow failed nodes to be shown.
 
           var contents = node.expr.isPrimitive() ? node.interval.contents : '';
@@ -215,8 +217,9 @@ var Visualization = React.createClass({
                 // 'highlightRule': shouldHighlight,
                 'dimRule': shouldDim,
               });
+              inputCharWrapperCount++;
               childNodes =
-                <div className="inputCharWrapper">
+                <div key={"inputChar#"+inputCharWrapperCount} className="inputCharWrapper">
                   <div className="placeholder">{content}
                     <div className={inputCharClasses}>{content}</div>
                   </div>
@@ -239,9 +242,14 @@ var Visualization = React.createClass({
             if (displayString === "/[\\s]/") {
               displayString = ' ';
             }
-            var label = <div className={labelClasses} {...labelProps}>{displayString}</div>;
+            var label = <div key={"label#"+formatPExprCount} className={labelClasses} {...labelProps}>{displayString}</div>;
             // children
-            var children = <div className="children">{childNodes}</div>;
+            var children =
+            <div key={"children#"+formatPExprCount} className="children">
+              <ReactCSSTransitionGroup className="childrenCSSTransitionGroup" transitionName="example">
+                {childNodes}
+                </ReactCSSTransitionGroup>
+              </div>;
             // pexpr
             var pexprClasses = cx({
               'pexpr': true,
@@ -250,7 +258,13 @@ var Visualization = React.createClass({
             var pexprProps = {
               node: node,
             };
-            return <div className={pexprClasses} {...pexprProps}>{label}{children}</div>;
+            if (displayString === "format") {
+              formatPExprCount++;
+            }
+            return <div key={"formatPExpr#"+formatPExprCount+"type:"+displayString} className={pexprClasses} {...pexprProps}>
+                    {label}{children}
+                  </div>;
+            // return <div className={pexprClasses} {...pexprProps}>{label}{children}</div>;
           } else {
             return childNodes;
           }
@@ -263,6 +277,7 @@ var Visualization = React.createClass({
       })(trace, undefined, undefined, true);
 
       // wrap top level nodes, make them line wrappable
+      var topLevelNodeCount = 0;
       tree = (function transformTopLevelNodes(node) {
         if (React.isValidElement(node)) {
           var topLevelNodeProps = {
@@ -270,7 +285,8 @@ var Visualization = React.createClass({
             onMouseLeave: self.onMouseOutTopLevelPExpr,
             node: node.props.node
           };
-          return <div className="topLevelNode" {...topLevelNodeProps}>{node}</div>;
+          topLevelNodeCount++;
+          return <div key={"topLevelNode#"+topLevelNodeCount} className="topLevelNode" {...topLevelNodeProps}>{node}</div>;
         } else {
           return node.map(function(subnode) {
             return transformTopLevelNodes(subnode);
