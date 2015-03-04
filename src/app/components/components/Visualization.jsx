@@ -154,7 +154,7 @@ var Visualization = React.createClass({
     if (this.lastTimeoutIDLeave) {
       window.clearTimeout(this.lastTimeoutIDLeave);
     }
-    this.lastTimeoutIDLeave = window.setTimeout(function(){EditorActionCreators.highlightTopLevelNode(undefined);}, 750);
+    this.lastTimeoutIDLeave = window.setTimeout(function(){EditorActionCreators.highlightTopLevelNode(undefined);}, 500);
     // EditorActionCreators.highlightTopLevelNode(undefined);
   },
 
@@ -217,11 +217,11 @@ var Visualization = React.createClass({
                 // 'highlightRule': shouldHighlight,
                 'dimRule': shouldDim,
               });
-              inputCharWrapperCount++;
+              inputCharWrapperCount++; //;
               childNodes =
-                <div key={"inputChar#"+inputCharWrapperCount} className="inputCharWrapper">
-                  <div className="placeholder">{content}
-                    <div className={inputCharClasses}>{content}</div>
+                <div key={"inputCharWrapper#"+inputCharWrapperCount+"content:"+content} className="inputCharWrapper">
+                  <div key={"placeholder#"+inputCharWrapperCount+"content:"+content} className="placeholder">{content}
+                    <div key={"inputChar:"+Math.random()/*force to re-render, otherwise might cause misalignment*/} className={inputCharClasses}>{content}</div>
                   </div>
                 </div>;
             }
@@ -244,12 +244,17 @@ var Visualization = React.createClass({
             }
             var label = <div key={"label#"+formatPExprCount} className={labelClasses} {...labelProps}>{displayString}</div>;
             // children
-            var children =
+            var children = (displayString === "format") ?
             <div key={"children#"+formatPExprCount} className="children">
               <ReactCSSTransitionGroup className="childrenCSSTransitionGroup" transitionName="example">
                 {childNodes}
                 </ReactCSSTransitionGroup>
-              </div>;
+              </div>
+            :
+              <div key={"children#"+formatPExprCount} className="children">
+                  {childNodes}
+                </div>;
+
             // pexpr
             var pexprClasses = cx({
               'pexpr': true,
