@@ -40,18 +40,18 @@ gulp.task('browserify', function(callback) {
       bundleLogger.start(bundleConfig.outputName);
 
       return bundler
-        // .transform('brfs')
-
         .bundle()
 
         // Report compile errors
         .on('error', handleErrors)
+
         // Use vinyl-source-stream to make the
         // stream gulp compatible. Specifiy the
         // desired output filename here.
         .pipe(source(bundleConfig.outputName))
+
         // uglify
-        .pipe(gutil.env.type === 'production' ? streamify(uglify()) : gutil.noop())
+        // .pipe(gutil.env.type === 'production' ? streamify(uglify()) : gutil.noop())
 
         // Specify the output destination
         .pipe(gulp.dest(bundleConfig.dest))
