@@ -38,20 +38,20 @@ function isBlackhole(traceNode) {
            blackholeNodeTypes[desc]) {
       return true;
     }
+    // hide empty chars
     if (desc === "chars" && traceNode.interval && traceNode.interval.startIdx === traceNode.interval.endIdx) {
       return true;
     }
   }
 
-
-
   var ret = false;
-
   if (traceNode.interval) {
+    // hide nodes that captures no input
     if (traceNode.interval.startIdx === traceNode.interval.endIdx) {
       ret = true;
     }
 
+    // except when it is in a highlighted top level node
     [this.state.highlightedTopLevelNode, this.state.cursorHighlightedTopLevelNode].forEach(function(topLevelNode) {
       if (topLevelNode) {
         var highlightedInterval = topLevelNode.interval;
@@ -101,6 +101,7 @@ var Visualization = React.createClass({
 
   componentDidMount: function() {
     EditorStore.addChangeListener(this._onChange);
+    // load grammar from script tag
     EditorActionCreators.didMount();
   },
 
@@ -138,7 +139,7 @@ var Visualization = React.createClass({
     EditorActionCreators.highlightNode(undefined);
   },
 
-  onMouseOverTopLevelPExpr: function(node, e) {
+  onMouseEnterTopLevelPExpr: function(node, e) {
     // if (this.lastTimeoutIDEnter) {
     //   window.clearTimeout(this.lastTimeoutIDEnter);
     // }
@@ -150,7 +151,7 @@ var Visualization = React.createClass({
     EditorActionCreators.highlightTopLevelNode(node);
   },
 
-  onMouseOutTopLevelPExpr: function(e) {
+  onMouseLeaveTopLevelPExpr: function(e) {
     if (this.lastTimeoutIDLeave) {
       window.clearTimeout(this.lastTimeoutIDLeave);
     }
@@ -217,7 +218,7 @@ var Visualization = React.createClass({
                 // 'highlightRule': shouldHighlight,
                 'dimRule': shouldDim,
               });
-              inputCharWrapperCount++; //;
+              inputCharWrapperCount++;
               childNodes =
                 <div key={"inputCharWrapper#"+inputCharWrapperCount+"content:"+content} className="inputCharWrapper">
                   <div key={"placeholder#"+inputCharWrapperCount+"content:"+content} className="placeholder">{content}
@@ -228,6 +229,9 @@ var Visualization = React.createClass({
           }
 
           if ((shouldShowTrace && shouldNodeBeVisible.bind(self)(node)) || isWhitespace) {
+            if (displayString === "format") {
+              formatPExprCount++;
+            }
             // label
             var labelClasses = cx({
               'label': true,
@@ -244,16 +248,13 @@ var Visualization = React.createClass({
             }
             var label = <div key={"label#"+formatPExprCount} className={labelClasses} {...labelProps}>{displayString}</div>;
             // children
-            var children = (displayString === "format") ?
-            <div key={"children#"+formatPExprCount} className="children">
-              <ReactCSSTransitionGroup className="childrenCSSTransitionGroup" transitionName="example">
-                {childNodes}
-                </ReactCSSTransitionGroup>
-              </div>
-            :
+            var children =
               <div key={"children#"+formatPExprCount} className="children">
-                  {childNodes}
-                </div>;
+                {(displayString === "format") ? <ReactCSSTransitionGroup className="childrenCSSTransitionGroup" transitionName="example">
+                                                  {childNodes}
+                                                </ReactCSSTransitionGroup>
+                                              : {childNodes}}
+              </div>;
 
             // pexpr
             var pexprClasses = cx({
@@ -263,9 +264,6 @@ var Visualization = React.createClass({
             var pexprProps = {
               node: node,
             };
-            if (displayString === "format") {
-              formatPExprCount++;
-            }
             return <div key={"formatPExpr#"+formatPExprCount+"type:"+displayString} className={pexprClasses} {...pexprProps}>
                     {label}{children}
                   </div>;
@@ -286,8 +284,8 @@ var Visualization = React.createClass({
       tree = (function transformTopLevelNodes(node) {
         if (React.isValidElement(node)) {
           var topLevelNodeProps = {
-            onMouseEnter: self.onMouseOverTopLevelPExpr.bind(self, node.props.node),
-            onMouseLeave: self.onMouseOutTopLevelPExpr,
+            onMouseEnter: self.onMouseEnterTopLevelPExpr.bind(self, node.props.node),
+            onMouseLeave: self.onMouseLeaveTopLevelPExpr,
             node: node.props.node
           };
           topLevelNodeCount++;

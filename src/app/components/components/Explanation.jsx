@@ -59,7 +59,7 @@ var Explanation = React.createClass({
     node.scrollTop = nTop;
     node.scrollLeft = nLeft;
 
-    // TODO: highlight the node
+    // highlight the node
     oNode.classList.add("highlightRule");
     this.lastHighlightedNode = oNode;
   },
@@ -97,7 +97,6 @@ var Explanation = React.createClass({
     var classes = this.getClasses('explanation', {
     });
 
-    // console.log(this.state.highlightedNode);
     var subtitle = "";
     if (this.state.highlightedNode) {
       var displayString = this.state.highlightedNode.displayString;

@@ -2,8 +2,8 @@
 // @import "../../node_modules/material-ui/src/less/scaffolding.less";
 // @import "../../node_modules/material-ui/src/less/components.less";
 
-// @import (less) "../../node_modules/purecss/grids-responsive.css";
 // page animations: https://github.com/codrops/PageTransitions
+// @import (less) "animations.css";
 
 // purecss
 @import (less) "../../node_modules/purecss/pure.css";
@@ -17,17 +17,17 @@
 // for explanation styling
 @import (less) "github-markdown.css";
 
-// @import (less) "animations.css";
-
-
+// code mirror
 @import (less) "../../node_modules/codemirror/lib/codemirror.css";
-@import (less) "../../node_modules/codemirror/theme/monokai.css";
+// @import (less) "../../node_modules/codemirror/theme/monokai.css";
 
 body {
   margin: 0;
 }
 
+// ReactCSSTransitionGroup
 @widthDuration: 0.2s;
+@targetWidth: 50px;
 
 .example-enter {
   width: 0px;
@@ -35,11 +35,11 @@ body {
 }
 
 .example-enter.example-enter-active {
-  width: 50px;
+  width: @targetWidth;
 }
 
 .example-leave {
-  width: 50px;
+  width: @targetWidth;
   transition: width @widthDuration ease-out;
 }
 
@@ -47,6 +47,7 @@ body {
   width: 0px;
 }
 
+// Mixin
 @ease-out-function: cubic-bezier(0.23, 1, 0.32, 1);
 
 .ease-out(@duration: 450ms; @property: all; @delay: 0ms) {

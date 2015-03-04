@@ -13,7 +13,7 @@ module.exports = {
 
   textChange: function(value) {
     AppDispatcher.handleViewAction({
-      type: ActionTypes.TEXT_CHANGE,
+      type: ActionTypes.CHANGE_TEXT,
       value: value
     });
   },

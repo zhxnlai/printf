@@ -8,6 +8,8 @@ var ActionTypes = Constants.ActionTypes;
 
 var CHANGE_EVENT = 'change';
 
+var DEFAULT_TEXT = 'your name: %-10s, age: %3$010.3d';
+
 // Misc Helpers
 // ------------
 String.prototype.splice = function(idx, rem, s) {
@@ -27,9 +29,10 @@ function clone(obj) {
 var SOURCE_KEY = "optSource";
 var storageAvailable = typeof(Storage) !== "undefined";
 
+// TODO: setters should be private to file scope
 var store = function() {
   var g;
-  var text = 'your name: %-10s, age: %3$010.3d';
+  var text = DEFAULT_TEXT;
   if(storageAvailable && localStorage.getItem(SOURCE_KEY)) {
     text = localStorage.getItem(SOURCE_KEY);
   }
@@ -57,9 +60,9 @@ var store = function() {
     getCursorIndex: function() {
       return cursorIndex;
     },
+
     setCursorIndex: function(index) {
       cursorIndex = index;
-      console.log(cursorIndex);
     },
 
     getText: function() {
@@ -116,32 +119,28 @@ EditorStore.dispatchToken = AppDispatcher.register(function(payload) {
       EditorStore.emitChange();
       break;
 
-    case ActionTypes.TEXT_CHANGE:
-      var value = action.value;
-      EditorStore.setText(value);
+    case ActionTypes.CHANGE_TEXT:
+      EditorStore.setText(action.value);
       EditorStore.emitChange();
       break;
 
     case ActionTypes.HIGHLIGHT_NODE:
-      var node = action.node;
-      EditorStore.highlightNode(node);
+      EditorStore.highlightNode(action.node);
       EditorStore.emitChange();
       break;
 
     case ActionTypes.HIGHLIGHT_TOP_LEVEL_NODE:
-      var node = action.node;
-      EditorStore.highlightTopLevelNode(node);
+      EditorStore.highlightTopLevelNode(action.node);
       EditorStore.emitChange();
       break;
 
     case ActionTypes.CHANGE_CURSOR_INDEX:
-      var idx = action.index;
-      EditorStore.setCursorIndex(idx);
+      EditorStore.setCursorIndex(action.index);
       EditorStore.emitChange();
       break;
 
     default:
-      console.log(action.type);
+      console.log("No implementation for action: "+action.type);
       break;
   }
 

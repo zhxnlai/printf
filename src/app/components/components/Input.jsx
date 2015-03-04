@@ -42,8 +42,6 @@ var Input = React.createClass({
   },
 
   componentDidUpdate: function() {
-    // var el = this.getDOMNode();
-    // d3Chart.update(el, this.getChartState());
     if (this.state.highlightedNode) {
       this.highlight(this.state.highlightedNode.interval, 'highlightRule');
     }
@@ -75,14 +73,10 @@ var Input = React.createClass({
     var classes = this.getClasses('editor', {
     });
 
-    // if (this.state.highlightedNode) {
-    //   console.log(this.state.highlightedNode);
-    // }
     var props = {
       lineWrapping: true,
       viewportMargin: Infinity,
       lineNumbers: true,
-
       onChange: this.onEditorTextChange,
       defaultValue: this.state.text,
     };
