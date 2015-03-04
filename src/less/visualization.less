@@ -80,8 +80,6 @@
 }
 .pexpr {
 
-
-
   // align the top edge
   vertical-align: top;
 
@@ -101,17 +99,29 @@
     border-left: 1px solid rgb(219, 82, 75);
   }
   .label {
-    background-color: #efefef;
+    // background-color: #efefef;
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
     box-sizing: border-box;
     display: block;
-    margin: 1px 0;
+    // margin: 1px 0;
     padding: 1px 2px 0 2px;
     position: relative;
     text-align: center;
+    z-index: 0;
   }
-  .label:hover {
+  .label:after {
+    background-color: #efefef;
+    content: '';
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 0px;
+    right: 0px;
+    bottom: 1px;
+    z-index: -1;
+  }
+  .label:hover:after {
     background-color: #dfdfdf;
   }
   .label.prim {
@@ -120,6 +130,13 @@
     border-right: none;
     color: SeaGreen;
   }
+  .label.prim:after {
+    background-color: transparent;
+  }
+  .label.prim:hover:after {
+    background-color: transparent;
+  }
+
   .children {
     display: -webkit-flex;
     display: flex;

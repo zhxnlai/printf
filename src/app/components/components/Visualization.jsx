@@ -222,7 +222,7 @@ var Visualization = React.createClass({
               childNodes =
                 <div key={"inputCharWrapper#"+inputCharWrapperCount+"content:"+content} className="inputCharWrapper">
                   <div key={"placeholder#"+inputCharWrapperCount+"content:"+content} className="placeholder">{content}
-                    <div key={"inputChar:"+Math.random()/*force to re-render, otherwise might cause misalignment*/} className={inputCharClasses}>{content}</div>
+                    <div key={"inputChar:"+Math.random()/*force to re-render, this would disable easeout animation, otherwise might cause misalignment*/} className={inputCharClasses}>{content}</div>
                   </div>
                 </div>;
             }
@@ -247,6 +247,12 @@ var Visualization = React.createClass({
               displayString = ' ';
             }
             var label = <div key={"label#"+formatPExprCount} className={labelClasses} {...labelProps}>{displayString}</div>;
+
+            /*
+            var label = <div key={"label#"+formatPExprCount} className={labelClasses} {...labelProps}>
+                          <div className="labelContent">{displayString}</div>
+                        </div>;
+            */
             // children
             var children =
               <div key={"children#"+formatPExprCount} className="children">
