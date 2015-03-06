@@ -54,8 +54,9 @@ var Explanation = React.createClass({
 
   showNode: function (oNode) {
     var nLeft = 0, nTop = 0;
-    for (var oItNode = oNode; oItNode; nLeft += oItNode.offsetLeft, nTop += oItNode.offsetTop, oItNode = oItNode.offsetParent);
     var node = this.getDOMNode();
+
+    for (var oItNode = oNode; oItNode && oItNode !== node; nLeft += oItNode.offsetLeft, nTop += oItNode.offsetTop, oItNode = oItNode.offsetParent);
     node.scrollTop = nTop;
     node.scrollLeft = nLeft;
 
