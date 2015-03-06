@@ -41668,14 +41668,15 @@ function getStateFromStores() {
 var displayNameToId = {
   "format": "format-placeholders",
   "(parameter)?": "parameter",
-  "(flags)?": "flags",
+  "(flag)*": "flags",
   "(width)?": "width",
   "(precision)?": "precision",
   "(length)?": "length",
   "specifier": "specifier",
 
+  "flag": "flags",
+
   "parameter": "parameter",
-  "flags": "flags",
   "width": "width",
   "precision": "precision",
   "length": "length",
@@ -42010,7 +42011,8 @@ var PExpr = React.createClass({displayName: "PExpr",
     var pexprProps = {
       node: node,
     };
-    return React.createElement("div", React.__spread({style: style, key: "formatPExpr#"+formatPExprCount+"type:"+displayString, className: pexprClasses},  pexprProps), 
+    // key={"formatPExpr#"+formatPExprCount+"type:"+displayString}
+    return React.createElement("div", React.__spread({style: style, className: pexprClasses},  pexprProps), 
             label, children
           );
 
@@ -42090,8 +42092,14 @@ function isBlackhole(traceNode) {
     });
   }
 
+
   return ret;
 }
+
+// TODO: use this
+var shouldHideNodeTypes = keyMirror({
+  "(format chars)*": null,
+});
 
 function shouldNodeBeVisible(traceNode) {
   // TODO: We need to distinguish between nodes that nodes that should be
@@ -42101,6 +42109,7 @@ function shouldNodeBeVisible(traceNode) {
     return false;
   }
 
+
   switch (traceNode.expr.constructor.name) {
     case 'Alt':
     case 'Seq':
@@ -42108,7 +42117,7 @@ function shouldNodeBeVisible(traceNode) {
     case 'Many':
       // Not sure if this is exactly right. Maybe better would be to hide the
       // node if it doesn't have any visible children.
-      return traceNode.interval.contents.length > 0;
+      // return traceNode.interval.contents.length > 0;
     default:
       // Hide things that don't correspond to something the user wrote.
       if (!traceNode.expr.interval)
@@ -42272,7 +42281,7 @@ var Visualization = React.createClass({displayName: "Visualization",
               shouldAnimate: isDirectChildOfFormat,
             };
             // http://facebook.github.io/react/docs/multiple-components.html#dynamic-children
-            return React.createElement(PExpr, React.__spread({key: "formatPExpr#"+formatPExprCount+"type:"+displayString},  pexprProps));
+            return React.createElement(PExpr, React.__spread({key: "formatPExpr#"+formatPExprCount+"type:"+displayString+i},  pexprProps));
           } else {
             return childNodes;
           }
