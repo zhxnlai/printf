@@ -1,11 +1,93 @@
-<html>
+<!DOCTYPE html>
+<html class="no-js" lang="">
 <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Printf</title>
-  <meta http-equiv="refresh" content="0; url=http://zhxnlai.github.io/printf/build/" />
+  <meta name="description" content="An interactive math formula editor.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" type="text/css" href="main.css">
+  
+  <script type="text/ohm-js" id="arithmetic">
+
+  MyLang {
+
+    Expr
+      = chars (format chars)*
+
+    chars
+      = (char)*
+
+    char
+      = space | ~'\n' ~'%' _
+
+
+    format
+      = '%'(parameter)?(flags)?(width)?(precision)?(length)?specifier
+
+    parameter
+      = number'$'
+
+    specifier
+      = 'd'
+      | 'i'
+      | 'u'
+      | 'o'
+      | 'x'
+      | 'X'
+      | 'f'
+      | 'F'
+      | 'e'
+      | 'E'
+      | 'g'
+      | 'G'
+      | 'a'
+      | 'A'
+      | 'c'
+      | 's'
+      | 'p'
+      | '%'
+
+    flags
+      = '-'
+      | '+'
+      | space
+      | '#'
+      | '0'
+
+    width
+      = number
+      | '*'
+
+    precision
+      = '.' number --n
+      | '.*'
+
+    length
+      = 'hh'
+      | 'h'
+      | 'l'
+      | 'll'
+      | 'L'
+      | 'z'
+      | 'j'
+      | 't'
+
+
+    // Lexical rules
+
+    number  -- number
+      = digit+
+
+    tokens = (number | _)*
+
+  }
+</script>
+
 </head>
 
 <body>
-  <h1>Redirecting</h1>
-  Printf Visualizer
+  <script src="app.js"></script>
 </body>
 </html>
