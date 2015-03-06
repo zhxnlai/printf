@@ -3,8 +3,11 @@ var assign = require('object-assign');
 var ohm = require('../../libs/ohm.js');
 var keyMirror = require('keymirror');
 var cx = React.addons.classSet;
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+// var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 // <ReactCSSTransitionGroup transitionName="example"></ReactCSSTransitionGroup>
+var ReactTransitionGroup = React.addons.TransitionGroup;
+
+var PExpr = require('./PExpr.jsx');
 
 var Classable = require('../../mixins/classable.js');
 // var WindowListenable = require('../../mixins/window-listenable.js');
@@ -183,7 +186,7 @@ var Visualization = React.createClass({
       var inputCharWrapperCount = 0;
       var formatPExprCount = 0;
       var self = this;
-      tree = (function walkTraceNodes(nodes, container, inputContainer, showTrace) {
+      tree = (function walkTraceNodes(nodes, showTrace, isDirectChildOfFormat) {
         return nodes.map(function(node, i) {
           if (!node.succeeded) return;  // TODO: Allow failed nodes to be shown.
 
@@ -192,7 +195,15 @@ var Visualization = React.createClass({
 
           var shouldShowTrace = showTrace && !isBlackhole.bind(self)(node);
 
-          var childNodes = walkTraceNodes(node.children, undefined, undefined, shouldShowTrace);
+          var willBeDirectChildOfFormat = isDirectChildOfFormat;
+          if (shouldNodeBeVisible.bind(self)(node)) {
+            // if (isDirectChildOfFormat) {
+            //   console.log(node.displayString);
+            // }
+            willBeDirectChildOfFormat = node.displayString === "format";
+          }
+          // console.log(willBeDirectChildOfFormat);
+          var childNodes = walkTraceNodes(node.children, shouldShowTrace, willBeDirectChildOfFormat);
           // leaf node
           if (childNodes.length === 0) {
             var content = node.interval.inputStream.source
@@ -229,51 +240,20 @@ var Visualization = React.createClass({
           }
 
           if ((shouldShowTrace && shouldNodeBeVisible.bind(self)(node)) || isWhitespace) {
+            var displayString = node.displayString;
             if (displayString === "format") {
               formatPExprCount++;
             }
-            // label
-            var labelClasses = cx({
-              'label': true,
-              'prim': node.expr.isPrimitive(),
-            });
-            var labelProps = {
-              onMouseEnter: self.onMouseOverPExpr.bind(self, node),
-              onMouseLeave: self.onMouseOutPExpr,
-              onClick: self.onClickPExpr.bind(self, node),
-            };
-            var displayString = node.displayString;
-            if (displayString === "/[\\s]/") {
-              displayString = ' ';
-            }
-            var label = <div key={"label#"+formatPExprCount} className={labelClasses} {...labelProps}>{displayString}</div>;
-
-            /*
-            var label = <div key={"label#"+formatPExprCount} className={labelClasses} {...labelProps}>
-                          <div className="labelContent">{displayString}</div>
-                        </div>;
-            */
-            // children
-            var children =
-              <div key={"children#"+formatPExprCount} className="children">
-                {(displayString === "format") ? <ReactCSSTransitionGroup className="childrenCSSTransitionGroup" transitionName="example">
-                                                  {childNodes}
-                                                </ReactCSSTransitionGroup>
-                                              : {childNodes}}
-              </div>;
-
-            // pexpr
-            var pexprClasses = cx({
-              'pexpr': true,
-              'whitespace': isWhitespace,
-            });
             var pexprProps = {
+              parent: self,
               node: node,
+              count: formatPExprCount,
+              children: childNodes,
+              isWhitespace: isWhitespace,
+              shouldAnimate: isDirectChildOfFormat,
             };
-            return <div key={"formatPExpr#"+formatPExprCount+"type:"+displayString} className={pexprClasses} {...pexprProps}>
-                    {label}{children}
-                  </div>;
-            // return <div className={pexprClasses} {...pexprProps}>{label}{children}</div>;
+            // http://facebook.github.io/react/docs/multiple-components.html#dynamic-children
+            return <PExpr key={"formatPExpr#"+formatPExprCount+"type:"+displayString} {...pexprProps}/>;
           } else {
             return childNodes;
           }
@@ -283,7 +263,7 @@ var Visualization = React.createClass({
           var ret = node === undefined || (Array.isArray(node) && node.length === 0);
           return !ret;
         });
-      })(trace, undefined, undefined, true);
+      })(trace, true, false);
 
       // wrap top level nodes, make them line wrappable
       var topLevelNodeCount = 0;
@@ -303,7 +283,6 @@ var Visualization = React.createClass({
         }
       })(tree);
     }
-
     return (
       <div className="visualizationScrollWrapper">{/*TODO: no longer needed*/}
         <div ref="topLevelNodeWrapper" className="visualization">
@@ -314,5 +293,9 @@ var Visualization = React.createClass({
   }
 
 });
+
+// <ReactTransitionGroup key={"topLevelNode#"+topLevelNodeCount} className="topLevelNode"  {...topLevelNodeProps} component="div">
+//                                   {tree}
+//       </ReactTransitionGroup>;
 
 module.exports = Visualization;
