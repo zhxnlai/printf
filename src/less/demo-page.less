@@ -35,6 +35,7 @@
 
 }
 
+
 @media all and (max-width: 1000px) {
 
  .demo-page {
@@ -49,4 +50,24 @@
    }
  }
 
+}
+
+@media all and (max-width: 640px) {
+
+ .demo-page {
+   -webkit-flex-flow: column;
+      flex-direction: column;
+
+   .leftPanel {
+     -webkit-flex: 1;
+             flex: 1;
+     border-right: 0;
+     border-bottom: 1px solid @grey-200;
+   }
+
+   .rightPanel {
+     -webkit-flex: 1;
+             flex: 1;
+   }
+ }
 }

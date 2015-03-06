@@ -29,6 +29,22 @@ function clone(obj) {
 var SOURCE_KEY = "optSource";
 var storageAvailable = typeof(Storage) !== "undefined";
 
+// detect mobile browser
+var IS_MOBILE = typeof navigator === 'undefined' || (
+  navigator.userAgent.match(/Android/i)
+    || navigator.userAgent.match(/webOS/i)
+    || navigator.userAgent.match(/iPhone/i)
+    || navigator.userAgent.match(/iPad/i)
+    || navigator.userAgent.match(/iPod/i)
+    || navigator.userAgent.match(/BlackBerry/i)
+    || navigator.userAgent.match(/Windows Phone/i)
+);
+
+if (!IS_MOBILE) {
+  CodeMirror = require('codemirror');
+}
+
+
 // TODO: setters should be private to file scope
 var store = function() {
   var g;
@@ -42,6 +58,10 @@ var store = function() {
   var cursorIndex;
 
   return {
+    getIsMobile: function() {
+      return IS_MOBILE;
+    },
+
     getHighlightedNode: function() {
       return highlightedNode;
     },

@@ -21,6 +21,7 @@ function getStateFromStores() {
     highlightedNode : EditorStore.getHighlightedNode(),
     highlightedTopLevelNode : EditorStore.getHighlightedTopLevelNode(),
     cursorIndex: EditorStore.getCursorIndex(),
+    isMobile: EditorStore.getIsMobile(),
   };
 }
 
@@ -280,8 +281,13 @@ var Visualization = React.createClass({
       })(tree);
 
     }
+
+    var failureMessage = "Cannot visualize:";
+    if (this.state.isMobile) {
+      failureMessage = "Cannot visualize on mobile browser:";
+    }
     if (tree.length === 0) {
-      tree = [<h1 className="failureMessage">{"Cannot visualize:"}</h1>,
+      tree = [<h1 className="failureMessage">{failureMessage}</h1>,
               <h2 className="failure">{this.state.text}</h2>];
     }
 
