@@ -114,7 +114,8 @@ var PExpr = React.createClass({
     var pexprProps = {
       node: node,
     };
-    return <div style={style} key={"formatPExpr#"+formatPExprCount+"type:"+displayString} className={pexprClasses} {...pexprProps}>
+    // key={"formatPExpr#"+formatPExprCount+"type:"+displayString}
+    return <div style={style} className={pexprClasses} {...pexprProps}>
             {label}{children}
           </div>;
 

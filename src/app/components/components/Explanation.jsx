@@ -16,14 +16,15 @@ function getStateFromStores() {
 var displayNameToId = {
   "format": "format-placeholders",
   "(parameter)?": "parameter",
-  "(flags)?": "flags",
+  "(flag)*": "flags",
   "(width)?": "width",
   "(precision)?": "precision",
   "(length)?": "length",
   "specifier": "specifier",
 
+  "flag": "flags",
+
   "parameter": "parameter",
-  "flags": "flags",
   "width": "width",
   "precision": "precision",
   "length": "length",
@@ -106,7 +107,7 @@ var Explanation = React.createClass({
 
     return (
       <div className={classes}>
-        <div className="explanation-body">          
+        <div className="explanation-body">
           <Format/>
         </div>
       </div>

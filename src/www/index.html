@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" type="text/css" href="main.css">
-  
+
   <script type="text/ohm-js" id="arithmetic">
 
   MyLang {
@@ -24,7 +24,7 @@
 
 
     format
-      = '%'(parameter)?(flags)?(width)?(precision)?(length)?specifier
+      = '%'(parameter)?(flag)*(width)?(precision)?(length)?specifier
 
     parameter
       = number'$'
@@ -49,7 +49,10 @@
       | 'p'
       | '%'
 
-    flags
+    // flags
+    //   = (flag)+
+
+    flag
       = '-'
       | '+'
       | space
