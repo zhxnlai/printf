@@ -6,11 +6,14 @@ var Redirect = Router.Redirect;
 var DefaultRoute = Router.DefaultRoute;
 var NotFoundRoute = Router.NotFoundRoute;
 
+var Master = require('./components/pages/Master.jsx');
 var Demo = require('./components/pages/demo.jsx');
 
 var AppRoutes = (
+  <Route name="root" path="/" handler={Master}  >
+    <DefaultRoute name="demo" handler={Demo} />
+  </Route>
 
-    <Route name="demo" path="/" handler={Demo} />
 
 );
 
