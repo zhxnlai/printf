@@ -98,17 +98,15 @@ var Explanation = React.createClass({
     var classes = this.getClasses('explanation', {
     });
 
-    var subtitle = "";
-    if (this.state.highlightedNode) {
-      var displayString = this.state.highlightedNode.displayString;
-      subtitle = "Showing explanation for: "+displayString;
-    }
+    // var subtitle = "";
+    // if (this.state.highlightedNode) {
+    //   var displayString = this.state.highlightedNode.displayString;
+    //   subtitle = "Showing explanation for: "+displayString;
+    // }<h2>{subtitle}</h2>
 
     return (
       <div className={classes}>
-        <div className="explanation-body">
-          <h1>Printf Format String</h1>
-          <h2>{subtitle}</h2>
+        <div className="explanation-body">          
           <Format/>
         </div>
       </div>

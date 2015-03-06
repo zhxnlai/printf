@@ -1,3 +1,7 @@
+Printf Format String
+===
+This website is an educational tool that helps programmers understand the obscure DSL used in printf.
+
 Chars
 ---
 A sequence of characters.
