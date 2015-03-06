@@ -1,6 +1,9 @@
 Printf Format String
 ===
-This website is an educational tool that helps programmers understand the obscure DSL used in printf.
+This website is an educational tool that helps programmers understand the obscure template language used in printf.
+
+### Usage
+Hover over any expression in the visualization to see its documentation on the right.
 
 Chars
 ---
