@@ -122,7 +122,7 @@ var Visualization = React.createClass({
     React.Children.forEach(this.refs.topLevelNodeWrapper.props.children, function(child) {
       var node = child.props.node;
       var cursorIdx = newState.cursorIndex;
-      if (cursorIdx !== undefined) {
+      if (cursorIdx !== undefined && node && node.interval) {
         if (node.interval.startIdx <= cursorIdx &&
             cursorIdx <= node.interval.endIdx ) {
           newState.cursorHighlightedTopLevelNode = node;
@@ -169,7 +169,7 @@ var Visualization = React.createClass({
 
   render: function() {
 
-    var tree = <h1>{this.state.text}</h1>;
+    var tree = [];
     var m = this.state.grammar;
     if (m) {
       var text = this.state.text;
@@ -278,7 +278,13 @@ var Visualization = React.createClass({
           });
         }
       })(tree);
+
     }
+    if (tree.length === 0) {
+      tree = [<h1 className="failureMessage">{"Cannot visualize:"}</h1>,
+              <h2 className="failure">{this.state.text}</h2>];
+    }
+
     return (
       <div className="visualizationScrollWrapper">{/*TODO: no longer needed*/}
         <div ref="topLevelNodeWrapper" className="visualization">
