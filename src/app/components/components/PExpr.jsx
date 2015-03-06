@@ -26,25 +26,22 @@ var PExpr = React.createClass({
   },
 
   componentDidMount: function() {
-    // this.isMounted = true;
-    // console.log("did mount");
     this.shouldAnimate = this.props.shouldAnimate;
-
   },
 
   // animation
   componentWillEnter: function(done) {
+    this.animatedStarted = true;
+
     if (!this.actualWidth) {
       this.actualWidth = parseFloat(window.getComputedStyle(this.getDOMNode()).width);
     }
     var duration = 250;
-    this.animatedStarted = true;
     this.tweenState('width', {
       easing: tweenState.easingTypes.easeOutSine,
       duration: duration,
       endValue: this.actualWidth,
     });
-    // call done
     this.lastTimeoutIDEnter = window.setTimeout(function() {
       done();
     }.bind(this), duration*1.5);
@@ -60,39 +57,21 @@ var PExpr = React.createClass({
       duration: duration,
       endValue: targetWidth,
     });
-
-    // call done
     this.lastTimeoutIDLeave = window.setTimeout(function() {
       done();
     }.bind(this), duration*1.5);
   },
 
-  // shouldComponentUpdate: function(nextProps, nextState) {
-  //   // not yet mounted
-  //   if (this.props.node.displayString === "format" ) {
-  //     return true;
-  //   }
-  //
-  //   if (nextState.width === 0) {
-  //     return true;
-  //   }
-  //   // console.log(nextProps.shouldAnimate || this.props.shouldAnimate);
-  //   return nextProps.shouldAnimate || this.props.shouldAnimate;
-  // },
+  // TODO: performance optimization
+  // shouldComponentUpdate: function(nextProps, nextState) {}
 
   render: function() {
     var style = {
     };
 
-    // console.log(this.getTweeningValue('width'));
     if ( this.props.shouldAnimate && this.animatedStarted) {
-
-      if (this.animatedStarted) {
-        var width = this.getTweeningValue('width');
-        style.width = width;
-        // a hack to make chrome update width
-        style.left = width;
-      }
+      var width = this.getTweeningValue('width');
+      style.width = width;
       // console.log("width: "+style.width +" actualWidth: "+parseFloat(window.getComputedStyle(this.getDOMNode()).width));
     }
 

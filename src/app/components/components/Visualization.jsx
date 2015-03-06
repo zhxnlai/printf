@@ -197,12 +197,8 @@ var Visualization = React.createClass({
 
           var willBeDirectChildOfFormat = isDirectChildOfFormat;
           if (shouldNodeBeVisible.bind(self)(node)) {
-            // if (isDirectChildOfFormat) {
-            //   console.log(node.displayString);
-            // }
             willBeDirectChildOfFormat = node.displayString === "format";
           }
-          // console.log(willBeDirectChildOfFormat);
           var childNodes = walkTraceNodes(node.children, shouldShowTrace, willBeDirectChildOfFormat);
           // leaf node
           if (childNodes.length === 0) {
