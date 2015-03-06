@@ -24,7 +24,7 @@
   // justify-content:  space-around;
 
   .topLevelNode {
-    margin-top: 30px;
+    margin-top: 35px;
     position: relative;
     -webkit-flex: 0 1 auto;
     flex: 0 1 auto;
@@ -43,15 +43,14 @@
     flex: 1 1 auto;
     text-align: center;
 
+    .inputFont;
     .placeholder {
-      .inputFont;
       display: inline-block;
       visibility: hidden;
     }
     .inputChar {
-      .inputFont;
       position: absolute;
-      top: -20px;
+      top: -25px;
 
       visibility: visible;
       // transform: translateX(-50%);
@@ -64,32 +63,29 @@
 }
 
 .inputFont {
-  .input;
-  font-size: 15px;
+  .monoFont;
+  font-size: 18px;
 }
 
-#input {
-  box-sizing: border-box;
-  font-size: 100%;
-  margin-bottom: 1px;
-  outline: none;
-  padding: 8px 0 10px 0;
+.monoFont {
+  font-family: Droid Sans Mono, Monaco, Menlo, sans-serif;
 }
-#input .highlight {
-  background-color: #B5D5FF;
-}
+
 .pexpr {
 
   // align the top edge
   vertical-align: top;
 
   cursor: pointer;
-  color: #333;
+  // color: #333;
+  color: @grey-900;
   display: inline-block;
   -webkit-flex-grow: 1;
   flex-grow: 1;
-  font-family: Monaco, Menlo, sans-serif;
-  font-size: 9px;
+  .monoFont;
+  // font-weight: 400;
+  // font-style: normal;
+  font-size: 12px;
   overflow: hidden;
   white-space: nowrap;
 
@@ -105,13 +101,13 @@
     box-sizing: border-box;
     display: block;
     // margin: 1px 0;
-    padding: 1px 2px 0 2px;
+    padding: 1px 2px 1px 2px;
     position: relative;
     text-align: center;
     z-index: 0;
   }
   .label:after {
-    background-color: #efefef;
+    background-color: @grey-200;
     content: '';
     display: block;
     position: absolute;
@@ -122,13 +118,13 @@
     z-index: -1;
   }
   .label:hover:after {
-    background-color: #dfdfdf;
+    background-color: @grey-300;
   }
   .label.prim {
     background-color: transparent;
     border-left: none;
     border-right: none;
-    color: SeaGreen;
+    color: @green-800;
   }
   .label.prim:after {
     background-color: transparent;
@@ -171,6 +167,21 @@
   opacity: 0.5;
 }
 
+.whitespace {
+  color: #ccc;
+}
+.pexpr.whitespace {
+  height: 0;
+}
+.pexpr.whitespace .prim {
+  /* HACK! This is not the right way to deal with whitespace. */
+  width: 10px;
+}
+
+
+
+
+
 #options {
   background-color: white;
   border-radius: 3px;
@@ -187,29 +198,4 @@
 #options input[type=checkbox] {
   position: relative;
   top: -1px;
-}
-.input {
-  font-family: Monaco, Menlo, sans-serif;
-}
-#input, #input span {
-  display: inline-block;
-  text-align: center;
-  white-space: pre;
-}
-#measuringDiv {
-  height: auto;
-  position: absolute;
-  visibility: hidden;
-  white-space: nowrap;
-  width: auto;
-}
-.whitespace {
-  color: #ccc;
-}
-.pexpr.whitespace {
-  height: 0;
-}
-.pexpr.whitespace .prim {
-  /* HACK! This is not the right way to deal with whitespace. */
-  width: 10px;
 }

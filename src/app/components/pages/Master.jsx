@@ -43,7 +43,8 @@ var Demo = React.createClass({
         <AppBar
           className="mui-dark-theme"
           title={title}
-          zDepth={2}>
+          zDepth={2}
+          showMenuIconButton={false}>
           {githubButton}
         </AppBar>
 

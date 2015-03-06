@@ -1,11 +1,12 @@
 .demo-page {
 
-  height: 100vh;
-  width: 100vw;
-
+  height: 100%;
+  width: 100%;
 
   display: -webkit-flex;
   display: flex;
+
+  background-color: @dark-white;
 
   .leftPanel {
     -webkit-flex: 3;
@@ -13,6 +14,8 @@
 
     height: 100%;
     overflow-y: scroll;
+
+    border-right: 1px solid @grey-200;
   }
 
   .rightPanel {
@@ -23,7 +26,7 @@
   }
 
   .editor {
-    margin: 1em;
+    margin: 2em 1em;
   }
 
   .visualization {
