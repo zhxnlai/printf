@@ -1,21 +1,41 @@
 .editor {
+  color: @grey-900;
+  line-height: 1.6;
+
   display: -webkit-flex;
   display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
 
-  .left {
+  // .content {
+  //   padding: 1em;
+  //
+  // }
+
+  .left, .right {
+    .monoFont;
+    font-size: 24px;
+
+    // -webkit-flex: 1;
+    // flex: 1;
+    // -webkit-flex: 1;
+    // flex: 1 1 50px;
 
   }
 
-  .right {
-
-  }
+  //  {
+  //
+  // }
 
   .mid {
-    -webkit-flex: 1;
-    flex: 1;
+    -webkit-flex: 1 0.5 200px;
+    flex: 1 0.5 200px;
   }
 
   .CodeMirror {
+    .monoFont;
+    line-height: 120%;
+    font-size: 24px;
     border: 1px solid #eee;
     height: auto;
   }

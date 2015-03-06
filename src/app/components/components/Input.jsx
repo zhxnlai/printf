@@ -76,7 +76,7 @@ var Input = React.createClass({
     var props = {
       lineWrapping: true,
       viewportMargin: Infinity,
-      lineNumbers: true,
+      // lineNumbers: true,
       onChange: this.onEditorTextChange,
       defaultValue: this.state.text,
     };
