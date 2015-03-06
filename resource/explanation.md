@@ -34,7 +34,7 @@ Character|Description
 ---|---
 <div id="-"/>`-`<br/>(minus)| Left-align the output of this placeholder (the default is to right-align the output).
 <div id="+"/>`+`<br/>(plus)| Prepends a plus for positive signed-numeric types. positive = '`+`', negative = '`-`'. (the default doesn't prepend anything in front of positive numbers).
-<div id=" "/>` `<br/>(space)| Prepends a space for positive signed-numeric types. positive = '` `', negative = '`-`'. This flag is ignored if the '`+`' flag exists. (the default doesn't prepend anything in front of positive numbers).
+<div id=" "/>` `<br/>(space)| Prepends a space for positive signed-numeric types. positive = '<code> </code>', negative = '`-`'. This flag is ignored if the '`+`' flag exists. (the default doesn't prepend anything in front of positive numbers).
 <div id="0"/>`0`<br/>(zero)| Prepends zeros for numbers when the width option is specified. (the default prepends spaces). Example: `printf("%2d", 3)` produces `" 3"`, while `printf("%02d", 3)` produces in `"03"`.
 <div id="#"/>`#`<br/>(hash)| Alternate form. For '`g`' and '`G`', trailing zeros are not removed. For '`f`', '`F`', '`e`', '`E`', '`g`', '`G`', the output always contains a decimal point. For '`o`', '`x`', and '`X`', a `0`, `0x`, and `0X`, respectively, is prepended to non-zero numbers.
 
