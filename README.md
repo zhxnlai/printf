@@ -19,6 +19,22 @@ To produce minified javascript:
 gulp --type production
 ~~~
 
+To deploy to github pages:
+~~~
+gulp deploy
+~~~
+
 Credit
 ---
-The explanation is adapted from [wikipedia](http://en.wikipedia.org/wiki/Printf_format_string).
+**Open Source Projects**
+- [React](http://facebook.github.io/react/)
+- [flux](http://material-ui.com/#/)
+- [material-ui](http://material-ui.com/#/)
+- [marked](https://github.com/chjj/marked/)
+- [react-code-mirror](https://github.com/ForbesLindesay/react-code-mirror)
+- [react-tween-state](https://github.com/chenglou/react-tween-state/)
+- ...
+
+**Documentation**
+- [wikipedia](http://en.wikipedia.org/wiki/Printf_format_string)
+- [C++ documentation](http://www.cplusplus.com/reference/cstdio/printf/)
