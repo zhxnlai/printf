@@ -63,17 +63,17 @@ Character|Description
 
 Character|Description|Example
 ---|---|---
-<div id="d"/><div id="i"/>`d`, `i`| `int` as a signed decimal number. '`%d`' and '`%i`' are synonymous for output, but are different when used with `scanf()` for input (where using `%i` will interpret a number as hexadecimal if it's preceded by `0x`, and octal if it's preceded by 0.)|`392`
+<div id="d"></div><div id="i"></div>`d`, `i`| `int` as a signed decimal number. '`%d`' and '`%i`' are synonymous for output, but are different when used with `scanf()` for input (where using `%i` will interpret a number as hexadecimal if it's preceded by `0x`, and octal if it's preceded by 0.)|`392`
 <div id="u"/>`u`| Print decimal `unsigned int`.|`7235`
-<div id="f"/><div id="F"/>`f`, `F`| `double` in normal (fixed-point) notation. '`f`' and '`F`' only differs in how the strings for an infinite number or NaN are printed ('`inf`', '`infinity`' and '`nan`' for '`f`', '`INF`', '`INFINITY`' and '`NAN`' for '`F`').|`392.65`
-<div id="e"/><div id="E"/>`e`, `E`| `double` value in standard form ([`-`]d.ddd `e`[`+`/`-`]ddd). An `E` conversion uses the letter `E` (rather than `e`) to introduce the exponent. The exponent always contains at least two digits; if the value is zero, the exponent is `00`. In Windows, the exponent contains three digits by default, e.g. `1.5e002`, but this can be altered by Microsoft-specific `_set_output_format` function.|`3.9265e+2` `3.9265E+2`
-<div id="g"/><div id="G"/>`g`, `G`| `double` in either normal or exponential notation, whichever is more appropriate for its magnitude. '`g`' uses lower-case letters, '`G`' uses upper-case letters. This type differs slightly from fixed-point notation in that insignificant zeroes to the right of the decimal point are not included. Also, the decimal point is not included on whole numbers.|`392.65`
-<div id="x"/><div id="X"/>`x`, `X`| `unsigned int` as a hexadecimal number. '`x`' uses lower-case letters and '`X`' uses upper-case.|`7fa` `7FA`
+<div id="f"></div><div id="F"></div>`f`, `F`| `double` in normal (fixed-point) notation. '`f`' and '`F`' only differs in how the strings for an infinite number or NaN are printed ('`inf`', '`infinity`' and '`nan`' for '`f`', '`INF`', '`INFINITY`' and '`NAN`' for '`F`').|`392.65`
+<div id="e"></div><div id="E"></div>`e`, `E`| `double` value in standard form ([`-`]d.ddd `e`[`+`/`-`]ddd). An `E` conversion uses the letter `E` (rather than `e`) to introduce the exponent. The exponent always contains at least two digits; if the value is zero, the exponent is `00`. In Windows, the exponent contains three digits by default, e.g. `1.5e002`, but this can be altered by Microsoft-specific `_set_output_format` function.|`3.9265e+2` `3.9265E+2`
+<div id="g"></div><div id="G"></div>`g`, `G`| `double` in either normal or exponential notation, whichever is more appropriate for its magnitude. '`g`' uses lower-case letters, '`G`' uses upper-case letters. This type differs slightly from fixed-point notation in that insignificant zeroes to the right of the decimal point are not included. Also, the decimal point is not included on whole numbers.|`392.65`
+<div id="x"></div><div id="X"></div>`x`, `X`| `unsigned int` as a hexadecimal number. '`x`' uses lower-case letters and '`X`' uses upper-case.|`7fa` `7FA`
 <div id="o"/>`o`| `unsigned int` in octal.|`610`
 <div id="s"/>`s`| null-terminated string.|`sample`
 <div id="c"/>`c`| `char` (character).|`a`
 <div id="p"/>`p`| `void *` (pointer to void) in an implementation-defined format.|`b8000000`
-<div id="a"/><div id="A"/>`a`, `A`| `double` in hexadecimal notation, starting with "0x" or "0X". '`a`' uses lower-case letters, '`A`' uses upper-case letters.[9][10] (C++11 iostreams have a `hexfloat` that works the same).|`-0xc.90fep-2` `-0XC.90FEP-2`
+<div id="a"></div><div id="A"></div>`a`, `A`| `double` in hexadecimal notation, starting with "0x" or "0X". '`a`' uses lower-case letters, '`A`' uses upper-case letters.[9][10] (C++11 iostreams have a `hexfloat` that works the same).|`-0xc.90fep-2` `-0XC.90FEP-2`
 <div id="n"/>`n`| Print nothing, but write number of characters successfully written so far into an integer pointer parameter.|
 <div id="%"/>`%`| a literal '`%`' character (this type doesn't accept any flags, width, precision or length).|`%`
 
