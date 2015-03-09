@@ -1,6 +1,6 @@
 {
   "firebase": "printf",
-  "public": "build",
+  "public": "redirect",
   "ignore": [
     "firebase.json",
     "**/.*",
