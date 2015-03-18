@@ -17,7 +17,7 @@ var EditorActionCreators = require('../../actions/EditorActionCreators.js');
 function getStateFromStores() {
   return {
     text : EditorStore.getText(),
-    grammar : EditorStore.getGrammar(),
+    trace : EditorStore.getTrace(),
     highlightedNode : EditorStore.getHighlightedNode(),
     highlightedTopLevelNode : EditorStore.getHighlightedTopLevelNode(),
     cursorIndex: EditorStore.getCursorIndex(),
@@ -112,8 +112,6 @@ var Visualization = React.createClass({
 
   componentDidMount: function() {
     EditorStore.addChangeListener(this._onChange);
-    // load grammar from script tag
-    EditorActionCreators.didMount();
   },
 
   componentWillUnmount: function() {
@@ -178,18 +176,8 @@ var Visualization = React.createClass({
   render: function() {
 
     var tree = [];
-    var m = this.state.grammar;
-    if (m) {
-      var text = this.state.text;
-      var trace;
-      try {
-        var root = m.matchContents(text, 'Expr', true, true);
-        trace = root._trace;
-      } catch (e) {
-        if (!(e instanceof ohm.error.MatchFailure))
-          throw e;
-        trace = e.state.trace;
-      }
+    var trace = this.state.trace;
+    if (trace) {
 
       var inputCharWrapperCount = 0;
       var formatPExprCount = 0;

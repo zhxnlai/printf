@@ -25,6 +25,7 @@ var Demo = React.createClass({
 
   componentDidMount: function() {
     EditorStore.addChangeListener(this._onChange);
+    // load grammar from script tag
     EditorActionCreators.didMount();
   },
 

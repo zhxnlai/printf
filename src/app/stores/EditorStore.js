@@ -57,6 +57,8 @@ var store = function() {
 
   var cursorIndex;
 
+  var trace;
+
   return {
     getIsMobile: function() {
       return IS_MOBILE;
@@ -80,7 +82,6 @@ var store = function() {
     getCursorIndex: function() {
       return cursorIndex;
     },
-
     setCursorIndex: function(index) {
       cursorIndex = index;
     },
@@ -88,12 +89,12 @@ var store = function() {
     getText: function() {
       return text ? text : "";
     },
-
     setText: function(value) {
       text = value;
       if (storageAvailable) {
         localStorage.setItem(SOURCE_KEY, value);
       }
+      this.updateTrace();
     },
 
     getGrammar: function(namespace, domId, grammar) {
@@ -107,8 +108,25 @@ var store = function() {
           console.log(err);
         }
       }
+      this.updateTrace();
       return g;
     },
+
+    updateTrace: function() {
+      if (g) {
+        try {
+          var root = g.matchContents(text, 'Expr', true, true);
+          trace = root._trace;
+        } catch (e) {
+          if (!(e instanceof ohm.error.MatchFailure))
+            throw e;
+          trace = e.state.trace;
+        }
+      }
+    },
+    getTrace: function() {
+      return trace;
+    }
   };
 };
 
