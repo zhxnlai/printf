@@ -14,14 +14,19 @@
   MyLang {
 
     Expr
-      = chars (format chars)*
+      = (component)*
 
-    chars
-      = (char)*
+    component
+      = '%%'
+      | format
+      | char
+
+    // chars
+    //   = (char)
+    // = (char & (~format))*
 
     char
-      = space | ~'\n' ~'%' _
-
+      = space |  _
 
     format
       = '%'(parameter)?(flag)*(width)?(precision)?(length)?specifier
@@ -48,9 +53,6 @@
       | 's'
       | 'p'
       | '%'
-
-    // flags
-    //   = (flag)+
 
     flag
       = '-'
