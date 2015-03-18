@@ -162,6 +162,7 @@ var store = function() {
     updateTrace: function() {
       if (g) {
         try {
+          // var jsString = eval("\""+text+"\""); // this will require source mapping
           var root = g.matchContents(text, 'Expr', true, true);
           trace = root._trace;
         } catch (e) {

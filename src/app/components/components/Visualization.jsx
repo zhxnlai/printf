@@ -29,7 +29,10 @@ var blackholeNodeTypes = keyMirror({
   number: null,
   // "digit+": null,
   precision_n: null,
-  '(char)*': null
+  '(char & (~format))*': null,
+  '(char)*': null,
+  'char': null,
+  "('%')? (char)*": null,
 });
 
 // A blackhole node is hidden and makes all its descendents hidden too.
@@ -42,10 +45,16 @@ function isBlackhole(traceNode) {
            blackholeNodeTypes[desc]) {
       return true;
     }
+
+    // if (desc[desc.length - 1] === '_' ||
+    //        desc === 'space' || desc === 'empty' ||
+    //        blackholeNodeTypes[desc]) {
+    //   return true;
+    // }
     // hide empty chars
-    if (desc === "chars" && traceNode.interval && traceNode.interval.startIdx === traceNode.interval.endIdx) {
-      return true;
-    }
+    // if (desc === "chars" && traceNode.interval && traceNode.interval.startIdx === traceNode.interval.endIdx) {
+    //   return true;
+    // }
   }
 
   var ret = false;
@@ -75,13 +84,17 @@ function isBlackhole(traceNode) {
 // TODO: use this
 var shouldHideNodeTypes = keyMirror({
   "(format chars)*": null,
+  "(component)*": null,
+  "component": null,
+  // "char": null,
 });
 
 function shouldNodeBeVisible(traceNode) {
   // TODO: We need to distinguish between nodes that nodes that should be
   // hidden and nodes that should be collapsed by default.
 
-  if (traceNode.displayString === "(format chars)*") {
+  var desc = traceNode.displayString;
+  if (shouldHideNodeTypes[desc]) {
     return false;
   }
 
@@ -174,7 +187,6 @@ var Visualization = React.createClass({
   },
 
   render: function() {
-
     var tree = [];
     var trace = this.state.trace;
     if (trace) {
@@ -182,7 +194,7 @@ var Visualization = React.createClass({
       var inputCharWrapperCount = 0;
       var formatPExprCount = 0;
       var self = this;
-      tree = (function walkTraceNodes(nodes, showTrace, isDirectChildOfFormat) {
+      tree = (function walkTraceNodes(nodes, showTrace, isDirectChildOfFormat, isDesendenceOfFormat) {
         return nodes.map(function(node, i) {
           if (!node.succeeded) return;  // TODO: Allow failed nodes to be shown.
 
@@ -195,13 +207,16 @@ var Visualization = React.createClass({
           if (shouldNodeBeVisible.bind(self)(node)) {
             willBeDirectChildOfFormat = node.displayString === "format";
           }
-          var childNodes = walkTraceNodes(node.children, shouldShowTrace, willBeDirectChildOfFormat);
+          var willBeDecendenceOfFormat = isDesendenceOfFormat || willBeDirectChildOfFormat;
+
+          var childNodes = walkTraceNodes(node.children, shouldShowTrace, willBeDirectChildOfFormat, willBeDecendenceOfFormat);
           // leaf node
           if (childNodes.length === 0) {
             var content = node.interval.inputStream.source
                           .substring(node.interval.startIdx, node.interval.endIdx)
                           .split("") // to array
-                          .map(function(char) { return char === ' ' ? <span className="whitespace">{'·'}</span> : char; });
+                          // space, new line, tab
+                          .map(function(char) { return /\s/.test(char) ? <span className="whitespace">{'·'}</span> : char; });
             if (content && content.length>0) {
               var shouldHighlight = false;
               var shouldDim = false;
@@ -243,6 +258,7 @@ var Visualization = React.createClass({
               children: childNodes,
               isWhitespace: isWhitespace,
               shouldAnimate: isDirectChildOfFormat,
+              isInsideFormat: isDesendenceOfFormat,
             };
             // http://facebook.github.io/react/docs/multiple-components.html#dynamic-children
             return <PExpr key={"formatPExpr#"+formatPExprCount+"type:"+displayString+i} {...pexprProps}/>;
@@ -255,7 +271,7 @@ var Visualization = React.createClass({
           var ret = node === undefined || (Array.isArray(node) && node.length === 0);
           return !ret;
         });
-      })(trace, true, false);
+      })(trace, true, false, false);
 
       // wrap top level nodes, make them line wrappable
       var topLevelNodeCount = 0;

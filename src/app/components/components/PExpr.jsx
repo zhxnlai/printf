@@ -17,6 +17,7 @@ var PExpr = React.createClass({
     node: React.PropTypes.object.isRequired,
     count: React.PropTypes.number.isRequired,
     shouldAnimate: React.PropTypes.bool.isRequired,
+    isInsideFormat: React.PropTypes.bool.isRequired,
   },
 
   getDefaultProps: function() {
@@ -80,21 +81,25 @@ var PExpr = React.createClass({
     var formatPExprCount = this.props.count;
     var childNodes = this.props.children;
     var isWhitespace = this.props.isWhitespace;
-
+    if (this.props.isInsideFormat) {
+      isWhitespace = false;
+    }
     // label
+    var isPrim = node.expr.isPrimitive();
+    var displayString = node.displayString;
+    if (displayString === "/[\\s]/") {
+      displayString = '·';
+      isPrim = false;
+    }
     var labelClasses = cx({
       'label': true,
-      'prim': node.expr.isPrimitive(),
+      'prim': isPrim,
     });
     var labelProps = {
       onMouseEnter: parent.onMouseOverPExpr.bind(parent, node),
       onMouseLeave: parent.onMouseOutPExpr,
       onClick: parent.onClickPExpr.bind(parent, node),
     };
-    var displayString = node.displayString;
-    if (displayString === "/[\\s]/") {
-      displayString = ' ';
-    }
     var label = <div key={"label#"+formatPExprCount} className={labelClasses} {...labelProps}>{displayString}</div>;
 
     // children
