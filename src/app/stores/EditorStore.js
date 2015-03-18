@@ -26,7 +26,8 @@ function clone(obj) {
 }
 
 // HTML5 storage API
-var SOURCE_KEY = "printf";
+var SOURCE_KEY = "printf_input";
+var ARGS_SOURCE_KEY = "printf_args";
 var storageAvailable = typeof(Storage) !== "undefined";
 
 // detect mobile browser
@@ -40,17 +41,20 @@ var IS_MOBILE = typeof navigator === 'undefined' || (
     || navigator.userAgent.match(/Windows Phone/i)
 );
 
-if (!IS_MOBILE) {
-  CodeMirror = require('codemirror');
-}
-
-
 // TODO: setters should be private to file scope
 var store = function() {
   var g;
   var text = DEFAULT_TEXT;
-  if(storageAvailable && localStorage.getItem(SOURCE_KEY)) {
-    text = localStorage.getItem(SOURCE_KEY);
+  var argsText = "";
+  var args = [];
+
+  if(storageAvailable) {
+    if (localStorage.getItem(SOURCE_KEY)) {
+      text = localStorage.getItem(SOURCE_KEY);
+    }
+    if (localStorage.getItem(ARGS_SOURCE_KEY)) {
+      argsText = localStorage.getItem(ARGS_SOURCE_KEY);
+    }
   }
   var highlightedNode;
   var highlightedTopLevelNode;
@@ -95,6 +99,49 @@ var store = function() {
         localStorage.setItem(SOURCE_KEY, value);
       }
       this.updateTrace();
+    },
+
+    getArgsText: function() {
+      return argsText ? argsText : "";
+    },
+    setArgsText: function(value) {
+      argsText = value;
+      if (storageAvailable) {
+        localStorage.setItem(ARGS_SOURCE_KEY, value);
+      }
+
+      // console.log(argsText);
+      this.updateArgs();
+    },
+    updateArgs: function() {
+      var newArgs = [];
+      if (argsText) {
+        try {
+          newArgs = eval("["+argsText+"]");
+        } catch(e) {
+          // console.log("args parsing syntax error");
+        }
+
+        // console.log(newArgs);
+
+        if (Array.isArray(newArgs)){
+          if (newArgs.some(function(item) {
+            return !(typeof item === "string" || typeof item === "number");
+          })) {
+            console.log("args type error");
+          } else {
+          }
+        }
+
+      }
+
+      args = newArgs.filter(function(item) {
+        return item !== null;
+      });
+
+    },
+    getArgs: function() {
+      return args ? args : [];
     },
 
     getGrammar: function(namespace, domId, grammar) {
@@ -154,11 +201,17 @@ EditorStore.dispatchToken = AppDispatcher.register(function(payload) {
   switch (action.type) {
     case ActionTypes.DID_MOUNT:
       var g = EditorStore.getGrammar('demo', 'arithmetic', 'MyLang');
+      EditorStore.updateArgs();
       EditorStore.emitChange();
       break;
 
     case ActionTypes.CHANGE_TEXT:
       EditorStore.setText(action.value);
+      EditorStore.emitChange();
+      break;
+
+    case ActionTypes.CHANGE_ARGS_TEXT:
+      EditorStore.setArgsText(action.value);
       EditorStore.emitChange();
       break;
 

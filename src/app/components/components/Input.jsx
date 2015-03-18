@@ -48,7 +48,7 @@ var Input = React.createClass({
   },
 
   onEditorTextChange: function(e) {
-    EditorActionCreators.textChange(e.target.value);
+    EditorActionCreators.changeText(e.target.value);
   },
 
   handleCursorActivity: function() {

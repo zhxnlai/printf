@@ -17,7 +17,42 @@
 
 
   .upper {
+    display: flex;
 
+    .left {
+      flex: 0 0 auto;
+    }
+    .right {
+      flex: 1 1 auto;
+    }
+  }
+
+  .middle {
+    .upper;
+    align-items: baseline;
+
+    .right {
+      .markdown-body;
+
+      pre {
+        background-color: rgba(0,0,0,0.04);
+        word-wrap: break-word;
+      }
+    }
+  }
+
+  .lower {
+    .upper;
+    align-items: baseline;
+
+    .right {
+      .markdown-body;
+
+      pre {
+        background-color: rgba(0,0,0,0.04);
+        word-wrap: break-word;
+      }
+    }
   }
 
   .monoFont;
@@ -31,8 +66,8 @@
     flex: 1 0.5 200px;
   }
 
-  .right {
-    display: inline-block;
+  .CodeMirror-empty {
+    // color: rgba(0,0,0,0.04);
+    opacity: 0.5;
   }
-
 }

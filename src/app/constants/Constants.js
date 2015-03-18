@@ -13,6 +13,8 @@ module.exports = {
     HIGHLIGHT_TOP_LEVEL_NODE: null,
 
     CHANGE_CURSOR_INDEX: null,
+    
+    CHANGE_ARGS_TEXT: null,
 
   }),
 

@@ -11,9 +11,16 @@ module.exports = {
     });
   },
 
-  textChange: function(value) {
+  changeText: function(value) {
     AppDispatcher.handleViewAction({
       type: ActionTypes.CHANGE_TEXT,
+      value: value
+    });
+  },
+
+  changeArgsText: function(value) {
+    AppDispatcher.handleViewAction({
+      type: ActionTypes.CHANGE_ARGS_TEXT,
       value: value
     });
   },

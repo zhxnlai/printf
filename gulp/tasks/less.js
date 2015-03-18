@@ -11,7 +11,7 @@ gulp.task('less', function() {
     .pipe(sourcemaps.init())
     .pipe(less())
     .on('error', handleErrors)
-    .pipe(minifyCSS({keepBreaks:true}))
+    // .pipe(minifyCSS({keepBreaks:true}))
     .pipe(uglifycss({
       maxLineLen: 80
     }))
