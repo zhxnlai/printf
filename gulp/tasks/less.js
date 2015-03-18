@@ -4,14 +4,16 @@ var gulp = require('gulp'),
   sourcemaps = require('gulp-sourcemaps'),
   handleErrors = require('../util/handleErrors'),
   config=require('../config').less;
-  var uglifycss = require('gulp-uglifycss');
+var uglifycss = require('gulp-uglifycss');
+var postcss      = require('gulp-postcss');
+var autoprefixer = require('autoprefixer-core');
 
 gulp.task('less', function() {
   return gulp.src(config.src)
     .pipe(sourcemaps.init())
     .pipe(less())
     .on('error', handleErrors)
-    // .pipe(minifyCSS({keepBreaks:true}))
+    .pipe(postcss([ autoprefixer({ browsers: ['last 2 version'] }) ]))
     .pipe(uglifycss({
       maxLineLen: 80
     }))
