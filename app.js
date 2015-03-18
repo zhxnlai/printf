@@ -48361,7 +48361,7 @@ var ActionTypes = Constants.ActionTypes;
 
 var CHANGE_EVENT = 'change';
 
-var DEFAULT_TEXT = 'your name: %-10s, age: %05d, height: %0+10.3f';
+var DEFAULT_TEXT = 'your name: %-10s, age: %05d, height: %0+10.3fm';
 
 // Misc Helpers
 // ------------
@@ -48398,7 +48398,7 @@ var IS_MOBILE = typeof navigator === 'undefined' || (
 var store = function() {
   var g;
   var text = DEFAULT_TEXT;
-  var argsText = "";
+  var argsText = "\"Foo bar\", 21, 1.8";
   var args = [];
   var argsErrorMsg = "";
 
