@@ -13,9 +13,35 @@
             flex: 3;
 
     height: 100%;
-    overflow-y: scroll;
 
     border-right: 1px solid @grey-200;
+
+    display: -webkit-flex;
+    display: flex;
+
+    -webkit-flex-direction: column;
+    flex-direction: column;
+
+    // -webkit-justify-content:  space-between;
+    // justify-content:  space-between;
+
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+
+    .input {
+      -webkit-flex: 0 0 auto;
+              flex: 0 0 auto;
+    }
+
+    .visualizationScrollWrapper {
+      -webkit-flex: 1 0 auto;
+              flex: 1 1 auto;
+    }
+
+    .printer {
+      -webkit-flex: 0 0 auto;
+              flex: 0 0 auto;
+    }
   }
 
   .rightPanel {
@@ -25,12 +51,12 @@
     height: 100%;
   }
 
-  .editor {
-    margin: 2em 1em;
+  .input {
+    // margin: 2em 1em;
   }
 
   .visualization {
-    margin: 1em;
+    // margin: 1em;
   }
 
 }

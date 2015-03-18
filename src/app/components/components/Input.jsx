@@ -70,7 +70,7 @@ var Input = React.createClass({
   },
 
   render: function() {
-    var classes = this.getClasses('editor', {
+    var classes = this.getClasses('input', {
     });
 
     var props = {

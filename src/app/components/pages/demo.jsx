@@ -4,6 +4,7 @@ var assign = require('object-assign');
 
 var Input = require('../components/Input.jsx');
 var Visualization = require('../components/Visualization.jsx');
+var Printer = require('../components/Printer.jsx');
 var Explanation = require('../components/Explanation.jsx');
 
 var EditorStore = require('../../stores/EditorStore.js');
@@ -44,6 +45,7 @@ var Demo = React.createClass({
         <div className="leftPanel">
           <Input/>
           <Visualization/>
+          <Printer/>
         </div>
         <div className="rightPanel">
           <Explanation/>
