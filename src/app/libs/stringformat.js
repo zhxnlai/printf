@@ -59,7 +59,7 @@ var format = function(formatString, var_args) {
   }
 
   // This re is used for matching, it also defines what is supported.
-  var formatRe = /%(\d+\$)?([0\-\ \+#]*)(\d+)?(\.(\d+))?(hh|h|ll|l|L|z|j|t)?([%sfdiu])/g;
+  var formatRe = /%(\d+\$)?([0\-\ \+#]*)(\d+)?(\.(\d+))?(hh|h|ll|l|L|z|j|t)?([%sfdiu]|[FeEgGxXocpaAn])/g;
 
   /**
    * Chooses which conversion function to call based on type conversion
@@ -101,8 +101,6 @@ var format = function(formatString, var_args) {
     // Patch the value argument to the beginning of our type specific call.
     arguments[0] = value;
 
-    console.log(arguments);
-
     if (parameter) {
       throw Error('[goog.string.format] Parameter is not supported');
     }
@@ -113,6 +111,10 @@ var format = function(formatString, var_args) {
 
     if (flags && flags.indexOf("#") > -1) {
       throw Error('[goog.string.format] Flag # is not supported');
+    }
+
+    if (!/[%sfdiu]/.test(type)) {
+      throw Error('[goog.string.format] Flag '+type+' is not supported');
     }
 
     return format.demuxes_[type].apply(null, [value, flags, width, dotp, precision, type, offset, wholeString]);
@@ -151,7 +153,12 @@ format.demuxes_['s'] = function(value,
                                             type,
                                             offset,
                                             wholeString) {
-  var replacement = value;
+  // if (typeof value !== "string") {
+  //   throw Error('[goog.string.format] s only accepts string but is given '+typeof value);
+  // }
+
+  var replacement = value.toString();
+
   // If no padding is necessary we're done.
   // The check for '' is necessary because Firefox incorrectly provides the
   // empty string instead of undefined for non-participating capture groups,
