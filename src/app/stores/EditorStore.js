@@ -8,7 +8,7 @@ var ActionTypes = Constants.ActionTypes;
 
 var CHANGE_EVENT = 'change';
 
-var DEFAULT_TEXT = 'your name: %-10s, age: %3$010.3d';
+var DEFAULT_TEXT = 'your name: %-10s, age: %05d, height: %0+10.3f';
 
 // Misc Helpers
 // ------------
@@ -47,6 +47,7 @@ var store = function() {
   var text = DEFAULT_TEXT;
   var argsText = "";
   var args = [];
+  var argsErrorMsg = "";
 
   if(storageAvailable) {
     if (localStorage.getItem(SOURCE_KEY)) {
@@ -115,33 +116,48 @@ var store = function() {
     },
     updateArgs: function() {
       var newArgs = [];
-      if (argsText) {
+      if (argsText !== undefined) {
         try {
+          // bug: eval(z) becomes <div id="z"/>
           newArgs = eval("["+argsText+"]");
+          argsErrorMsg = "";
         } catch(e) {
+          // console.log(e instanceof SyntaxError); // true
+          // console.log(e.message);                // "missing ; before statement"
+          // console.log(e.name);                   // "SyntaxError"
+          // console.log(e.fileName);               // "Scratchpad/1"
+          // console.log(e.lineNumber);             // 1
+          // console.log(e.columnNumber);           // 4
+          // console.log(e.stack);                  // "@Scratchpad/1:2:3\n"
+          // highlight
           // console.log("args parsing syntax error");
+          argsErrorMsg = e.toString();
         }
 
         // console.log(newArgs);
 
-        if (Array.isArray(newArgs)){
-          if (newArgs.some(function(item) {
-            return !(typeof item === "string" || typeof item === "number");
-          })) {
-            console.log("args type error");
-          } else {
-          }
-        }
+        // if (Array.isArray(newArgs)){
+        //   if (newArgs.some(function(item) {
+        //     return !(typeof item === "string" || typeof item === "number");
+        //   })) {
+        //     console.log("args type error");
+        //     // argsErrorMsg = e.toString();
+        //   } else {
+        //   }
+        // }
 
       }
 
       args = newArgs.filter(function(item) {
-        return item !== null;
+        return item !== null;// && typeof item !== "string" && typeof item !== "number";
       });
 
     },
     getArgs: function() {
       return args ? args : [];
+    },
+    getArgsErrorMsg: function() {
+      return argsErrorMsg;
     },
 
     getGrammar: function(namespace, domId, grammar) {

@@ -89,7 +89,7 @@ var PExpr = React.createClass({
     var displayString = node.displayString;
     if (displayString === "/[\\s]/") {
       displayString = '·';
-      isPrim = false;
+      // isPrim = false;
     }
     var labelClasses = cx({
       'label': true,
