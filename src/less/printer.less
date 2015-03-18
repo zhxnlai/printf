@@ -32,19 +32,27 @@
     user-select: none;
   }
 
-  .upper {
+  .shared {
+    display: -webkit-flex;
     display: flex;
 
     .left {
+      -webkit-flex: 0 0 auto;
       flex: 0 0 auto;
     }
+  }
+
+  .upper {
+    .shared;
     .right {
+      -webkit-flex: 1 1 auto;
       flex: 1 1 auto;
     }
   }
 
   .middle {
-    .upper;
+    .shared;
+    -webkit-align-items: baseline;
     align-items: baseline;
 
     .right {
@@ -58,7 +66,8 @@
   }
 
   .lower {
-    .upper;
+    .shared;
+    -webkit-align-items: baseline;
     align-items: baseline;
 
     .right {
