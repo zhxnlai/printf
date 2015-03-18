@@ -5,10 +5,6 @@ This website is an educational tool that helps programmers understand the obscur
 ### Usage
 Hover over any expression in the visualization to see its documentation on the right.
 
-Chars
----
-A sequence of characters.
-
 Format placeholders
 ---
 Formatting takes place via placeholders within the format string. For example, if a program wanted to print out a person's age, it could present the output by prefixing it with "Your age is ". To denote that we want the integer for the age to be shown immediately after that message, we may use the format string:
@@ -25,7 +21,6 @@ The syntax for a format placeholder is
 Character|Description
 ---|---
 <div id="$"/>`n$`| n is the number of the parameter to display using this format specifier, allowing the parameters provided to be output multiple times, using varying format specifiers or in different orders. If any single placeholder specifies a parameter, all the rest of the placeholders MUST also specify a parameter. This is a POSIX extension and not in C99. <br/> Example: `printf("%2$d %2$#x; %1$d %1$#x",16,17) produces "17 0x11; 16 0x10"`
-
 
 ### Flags
 **Flags** can be zero or more (in any order) of:
@@ -86,6 +81,7 @@ Credit
 - [marked](https://github.com/chjj/marked/)
 - [react-code-mirror](https://github.com/ForbesLindesay/react-code-mirror)
 - [react-tween-state](https://github.com/chenglou/react-tween-state/)
+- [google-closure-library](https://github.com/google/closure-library)
 - ...
 
 **Documentation**
