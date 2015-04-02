@@ -5,6 +5,8 @@ This website is an educational tool that helps programmers understand the obscur
 ### Usage
 Hover over any expression in the visualization to see its documentation on the right.
 
+Modify the argument list in the lower left corner to preview the result. The preview is based on  [stringFormat](http://docs.closure-library.googlecode.com/git/local_closure_goog_string_stringformat.js.source.html) from Google Closure library, which implements a subset of printf in JavaScript.
+
 Format placeholders
 ---
 Formatting takes place via placeholders within the format string. For example, if a program wanted to print out a person's age, it could present the output by prefixing it with "Your age is ". To denote that we want the integer for the age to be shown immediately after that message, we may use the format string:
