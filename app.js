@@ -41694,7 +41694,7 @@ module.exports = {
 
 };
 
-},{"../constants/Constants":306,"../dispatcher/AppDispatcher":307}],297:[function(require,module,exports){
+},{"../constants/Constants":307,"../dispatcher/AppDispatcher":308}],297:[function(require,module,exports){
 var React = require('react/addons');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -41716,7 +41716,7 @@ var AppRoutes = (
 
 module.exports = AppRoutes;
 
-},{"./components/pages/Master.jsx":304,"./components/pages/demo.jsx":305,"react-router":94,"react/addons":134}],298:[function(require,module,exports){
+},{"./components/pages/Master.jsx":305,"./components/pages/demo.jsx":306,"react-router":94,"react/addons":134}],298:[function(require,module,exports){
 var React = require('react');
 var Classable = require('../../mixins/classable.js');
 var assign = require('object-assign');
@@ -41724,7 +41724,7 @@ var assign = require('object-assign');
 var EditorStore = require('../../stores/EditorStore.js');
 var EditorActionCreators = require('../../actions/EditorActionCreators.js');
 
-var Format = require('./Format.jsx');
+var Markdown = require('./Markdown.jsx');
 
 function getStateFromStores() {
   return {
@@ -41827,7 +41827,7 @@ var Explanation = React.createClass({displayName: "Explanation",
     return (
       React.createElement("div", {className: classes}, 
         React.createElement("div", {className: "explanation-body"}, 
-          React.createElement(Format, null)
+          React.createElement(Markdown, null)
         )
       )
       );
@@ -41836,36 +41836,26 @@ var Explanation = React.createClass({displayName: "Explanation",
 
 module.exports = Explanation;
 
-},{"../../actions/EditorActionCreators.js":296,"../../mixins/classable.js":310,"../../stores/EditorStore.js":311,"./Format.jsx":299,"object-assign":83,"react":295}],299:[function(require,module,exports){
+},{"../../actions/EditorActionCreators.js":296,"../../mixins/classable.js":311,"../../stores/EditorStore.js":312,"./Markdown.jsx":301,"object-assign":83,"react":295}],299:[function(require,module,exports){
 var React = require('react');
-var Classable = require('../../mixins/classable.js');
-var marked = require('marked');
+var mui = require('material-ui');
+var SvgIcon = mui.SvgIcon;
 
-// using brfs transform
-
-var text = "Printf Format String\n===\nThis website is an educational tool that helps programmers understand the obscure template language used in printf.\n\n### Usage\nHover over any expression in the visualization to see its documentation on the right.\n\nFormat placeholders\n---\nFormatting takes place via placeholders within the format string. For example, if a program wanted to print out a person's age, it could present the output by prefixing it with \"Your age is \". To denote that we want the integer for the age to be shown immediately after that message, we may use the format string:\n\n`\"Your age is %d.\"`\n\nThe syntax for a format placeholder is\n\n`%[parameter][flags][width][.precision][length]type`\n\n### Parameter\n**Parameter** can be omitted or can be:\n\nCharacter|Description\n---|---\n<div id=\"$\"/>`n$`| n is the number of the parameter to display using this format specifier, allowing the parameters provided to be output multiple times, using varying format specifiers or in different orders. If any single placeholder specifies a parameter, all the rest of the placeholders MUST also specify a parameter. This is a POSIX extension and not in C99. <br/> Example: `printf(\"%2$d %2$#x; %1$d %1$#x\",16,17) produces \"17 0x11; 16 0x10\"`\n\n### Flags\n**Flags** can be zero or more (in any order) of:\n\nCharacter|Description\n---|---\n<div id=\"-\"/>`-`<br/>(minus)| Left-align the output of this placeholder (the default is to right-align the output).\n<div id=\"+\"/>`+`<br/>(plus)| Prepends a plus for positive signed-numeric types. positive = '`+`', negative = '`-`'. (the default doesn't prepend anything in front of positive numbers).\n<div id=\" \"/>` `<br/>(space)| Prepends a space for positive signed-numeric types. positive = '<code> </code>', negative = '`-`'. This flag is ignored if the '`+`' flag exists. (the default doesn't prepend anything in front of positive numbers).\n<div id=\"0\"/>`0`<br/>(zero)| Prepends zeros for numbers when the width option is specified. (the default prepends spaces). Example: `printf(\"%2d\", 3)` produces `\" 3\"`, while `printf(\"%02d\", 3)` produces in `\"03\"`.\n<div id=\"#\"/>`#`<br/>(hash)| Alternate form. For '`g`' and '`G`', trailing zeros are not removed. For '`f`', '`F`', '`e`', '`E`', '`g`', '`G`', the output always contains a decimal point. For '`o`', '`x`', and '`X`', a `0`, `0x`, and `0X`, respectively, is prepended to non-zero numbers.\n\n### Width\n**Width** specifies a minimum number of characters to output, and is typically used to pad fixed-width fields in tabulated output, where the fields would otherwise be smaller, although it does not cause truncation of oversized fields. A leading zero in the width value is interpreted as the zero-padding flag mentioned above, and a negative value is treated as the positive value in conjunction with the left-alignment \"`-`\" flag also mentioned above.\n\n### Precision\n**Precision** usually specifies a maximum limit on the output, depending on the particular formatting type. For floating point numeric types, it specifies the number of digits to the right of the decimal point that the output should be rounded. For the string type, it limits the number of characters that should be output, after which the string is truncated.\n\n### Length\n**Length** can be omitted or be any of:\n\nCharacter|Description\n---|---\n<div id=\"hh\"/>`hh`| For integer types, causes `printf` to expect an `int`-sized integer argument which was promoted from a `char`.\n<div id=\"h\"/>`h`| For integer types, causes `printf` to expect an `int`-sized integer argument which was promoted from a `short`.\n<div id=\"l\"/>`l`| For integer types, causes `printf` to expect a `long`-sized integer argument. <br/> For floating point types, causes `printf` to expect a `double` argument.\n<div id=\"ll\"/>`ll`| For integer types, causes `printf` to expect a` long long`-sized integer argument.\n<div id=\"L\"/>`L`| For floating point types, causes `printf` to expect a `long double` argument.\n<div id=\"z\"/>`z`| For integer types, causes `printf` to expect a `size_t`-sized integer argument.\n<div id=\"j\"/>`j`| For integer types, causes `printf` to expect a `intmax_t`-sized integer argument.\n<div id=\"t\"/>`t`| For integer types, causes `printf` to expect a `ptrdiff_t`-sized integer argument.\n\n### Specifier\n**Specifier** can be any of:\n\nCharacter|Description|Example\n---|---|---\n<div id=\"d\"></div><div id=\"i\"></div>`d`, `i`| `int` as a signed decimal number. '`%d`' and '`%i`' are synonymous for output, but are different when used with `scanf()` for input (where using `%i` will interpret a number as hexadecimal if it's preceded by `0x`, and octal if it's preceded by 0.)|`392`\n<div id=\"u\"/>`u`| Print decimal `unsigned int`.|`7235`\n<div id=\"f\"></div><div id=\"F\"></div>`f`, `F`| `double` in normal (fixed-point) notation. '`f`' and '`F`' only differs in how the strings for an infinite number or NaN are printed ('`inf`', '`infinity`' and '`nan`' for '`f`', '`INF`', '`INFINITY`' and '`NAN`' for '`F`').|`392.65`\n<div id=\"e\"></div><div id=\"E\"></div>`e`, `E`| `double` value in standard form ([`-`]d.ddd `e`[`+`/`-`]ddd). An `E` conversion uses the letter `E` (rather than `e`) to introduce the exponent. The exponent always contains at least two digits; if the value is zero, the exponent is `00`. In Windows, the exponent contains three digits by default, e.g. `1.5e002`, but this can be altered by Microsoft-specific `_set_output_format` function.|`3.9265e+2` `3.9265E+2`\n<div id=\"g\"></div><div id=\"G\"></div>`g`, `G`| `double` in either normal or exponential notation, whichever is more appropriate for its magnitude. '`g`' uses lower-case letters, '`G`' uses upper-case letters. This type differs slightly from fixed-point notation in that insignificant zeroes to the right of the decimal point are not included. Also, the decimal point is not included on whole numbers.|`392.65`\n<div id=\"x\"></div><div id=\"X\"></div>`x`, `X`| `unsigned int` as a hexadecimal number. '`x`' uses lower-case letters and '`X`' uses upper-case.|`7fa` `7FA`\n<div id=\"o\"/>`o`| `unsigned int` in octal.|`610`\n<div id=\"s\"/>`s`| null-terminated string.|`sample`\n<div id=\"c\"/>`c`| `char` (character).|`a`\n<div id=\"p\"/>`p`| `void *` (pointer to void) in an implementation-defined format.|`b8000000`\n<div id=\"a\"></div><div id=\"A\"></div>`a`, `A`| `double` in hexadecimal notation, starting with \"0x\" or \"0X\". '`a`' uses lower-case letters, '`A`' uses upper-case letters.[9][10] (C++11 iostreams have a `hexfloat` that works the same).|`-0xc.90fep-2` `-0XC.90FEP-2`\n<div id=\"n\"/>`n`| Print nothing, but write number of characters successfully written so far into an integer pointer parameter.|\n<div id=\"%\"/>`%`| a literal '`%`' character (this type doesn't accept any flags, width, precision or length).|`%`\n\nCredit\n---\n**Open Source Projects**\n- [React](http://facebook.github.io/react/)\n- [flux](http://material-ui.com/#/)\n- [material-ui](http://material-ui.com/#/)\n- [marked](https://github.com/chjj/marked/)\n- [react-code-mirror](https://github.com/ForbesLindesay/react-code-mirror)\n- [react-tween-state](https://github.com/chenglou/react-tween-state/)\n- [google-closure-library](https://github.com/google/closure-library)\n- ...\n\n**Documentation**\n- [wikipedia](http://en.wikipedia.org/wiki/Printf_format_string)\n- [C++ documentation](http://www.cplusplus.com/reference/cstdio/printf/)\n";
-
-var Format = React.createClass({displayName: "Format",
-  mixins: [Classable],
+var Help = React.createClass({displayName: "Help",
 
   render: function() {
-    var classes = this.getClasses('format', {
-      "markdown-body": true
-    });
-
-    var rawMarkup = marked(text);
-
     return (
-      React.createElement("div", {className: classes}, 
-        React.createElement("span", {dangerouslySetInnerHTML: {__html: rawMarkup}})
+      React.createElement(SvgIcon, React.__spread({},  this.props), 
+        React.createElement("path", {d: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"})
       )
-      );
-    }
+    );
+  }
+
 });
 
-module.exports = Format;
+module.exports = Help;
 
-},{"../../mixins/classable.js":310,"marked":14,"react":295}],300:[function(require,module,exports){
+},{"material-ui":15,"react":295}],300:[function(require,module,exports){
 var React = require('react');
 var Classable = require('../../mixins/classable.js');
 var assign = require('object-assign');
@@ -41961,7 +41951,36 @@ var Input = React.createClass({displayName: "Input",
 
 module.exports = Input;
 
-},{"../../actions/EditorActionCreators.js":296,"../../mixins/classable.js":310,"../../stores/EditorStore.js":311,"object-assign":83,"react":295,"react-code-mirror":84}],301:[function(require,module,exports){
+},{"../../actions/EditorActionCreators.js":296,"../../mixins/classable.js":311,"../../stores/EditorStore.js":312,"object-assign":83,"react":295,"react-code-mirror":84}],301:[function(require,module,exports){
+var React = require('react');
+var Classable = require('../../mixins/classable.js');
+var marked = require('marked');
+
+// using brfs transform
+
+var text = "Printf Format String\n===\nThis website is an educational tool that helps programmers understand the obscure template language used in printf.\n\n### Usage\nHover over any expression in the visualization to see its documentation on the right.\n\nModify the argument list in the lower left corner to preview the result. The preview is based on  [stringFormat](http://docs.closure-library.googlecode.com/git/local_closure_goog_string_stringformat.js.source.html) from Google Closure library, which implements a subset of printf in JavaScript.\n\nFormat placeholders\n---\nFormatting takes place via placeholders within the format string. For example, if a program wanted to print out a person's age, it could present the output by prefixing it with \"Your age is \". To denote that we want the integer for the age to be shown immediately after that message, we may use the format string:\n\n`\"Your age is %d.\"`\n\nThe syntax for a format placeholder is\n\n`%[parameter][flags][width][.precision][length]type`\n\n### Parameter\n**Parameter** can be omitted or can be:\n\nCharacter|Description\n---|---\n<div id=\"$\"/>`n$`| n is the number of the parameter to display using this format specifier, allowing the parameters provided to be output multiple times, using varying format specifiers or in different orders. If any single placeholder specifies a parameter, all the rest of the placeholders MUST also specify a parameter. This is a POSIX extension and not in C99. <br/> Example: `printf(\"%2$d %2$#x; %1$d %1$#x\",16,17) produces \"17 0x11; 16 0x10\"`\n\n### Flags\n**Flags** can be zero or more (in any order) of:\n\nCharacter|Description\n---|---\n<div id=\"-\"/>`-`<br/>(minus)| Left-align the output of this placeholder (the default is to right-align the output).\n<div id=\"+\"/>`+`<br/>(plus)| Prepends a plus for positive signed-numeric types. positive = '`+`', negative = '`-`'. (the default doesn't prepend anything in front of positive numbers).\n<div id=\" \"/>` `<br/>(space)| Prepends a space for positive signed-numeric types. positive = '<code> </code>', negative = '`-`'. This flag is ignored if the '`+`' flag exists. (the default doesn't prepend anything in front of positive numbers).\n<div id=\"0\"/>`0`<br/>(zero)| Prepends zeros for numbers when the width option is specified. (the default prepends spaces). Example: `printf(\"%2d\", 3)` produces `\" 3\"`, while `printf(\"%02d\", 3)` produces in `\"03\"`.\n<div id=\"#\"/>`#`<br/>(hash)| Alternate form. For '`g`' and '`G`', trailing zeros are not removed. For '`f`', '`F`', '`e`', '`E`', '`g`', '`G`', the output always contains a decimal point. For '`o`', '`x`', and '`X`', a `0`, `0x`, and `0X`, respectively, is prepended to non-zero numbers.\n\n### Width\n**Width** specifies a minimum number of characters to output, and is typically used to pad fixed-width fields in tabulated output, where the fields would otherwise be smaller, although it does not cause truncation of oversized fields. A leading zero in the width value is interpreted as the zero-padding flag mentioned above, and a negative value is treated as the positive value in conjunction with the left-alignment \"`-`\" flag also mentioned above.\n\n### Precision\n**Precision** usually specifies a maximum limit on the output, depending on the particular formatting type. For floating point numeric types, it specifies the number of digits to the right of the decimal point that the output should be rounded. For the string type, it limits the number of characters that should be output, after which the string is truncated.\n\n### Length\n**Length** can be omitted or be any of:\n\nCharacter|Description\n---|---\n<div id=\"hh\"/>`hh`| For integer types, causes `printf` to expect an `int`-sized integer argument which was promoted from a `char`.\n<div id=\"h\"/>`h`| For integer types, causes `printf` to expect an `int`-sized integer argument which was promoted from a `short`.\n<div id=\"l\"/>`l`| For integer types, causes `printf` to expect a `long`-sized integer argument. <br/> For floating point types, causes `printf` to expect a `double` argument.\n<div id=\"ll\"/>`ll`| For integer types, causes `printf` to expect a` long long`-sized integer argument.\n<div id=\"L\"/>`L`| For floating point types, causes `printf` to expect a `long double` argument.\n<div id=\"z\"/>`z`| For integer types, causes `printf` to expect a `size_t`-sized integer argument.\n<div id=\"j\"/>`j`| For integer types, causes `printf` to expect a `intmax_t`-sized integer argument.\n<div id=\"t\"/>`t`| For integer types, causes `printf` to expect a `ptrdiff_t`-sized integer argument.\n\n### Specifier\n**Specifier** can be any of:\n\nCharacter|Description|Example\n---|---|---\n<div id=\"d\"></div><div id=\"i\"></div>`d`, `i`| `int` as a signed decimal number. '`%d`' and '`%i`' are synonymous for output, but are different when used with `scanf()` for input (where using `%i` will interpret a number as hexadecimal if it's preceded by `0x`, and octal if it's preceded by 0.)|`392`\n<div id=\"u\"/>`u`| Print decimal `unsigned int`.|`7235`\n<div id=\"f\"></div><div id=\"F\"></div>`f`, `F`| `double` in normal (fixed-point) notation. '`f`' and '`F`' only differs in how the strings for an infinite number or NaN are printed ('`inf`', '`infinity`' and '`nan`' for '`f`', '`INF`', '`INFINITY`' and '`NAN`' for '`F`').|`392.65`\n<div id=\"e\"></div><div id=\"E\"></div>`e`, `E`| `double` value in standard form ([`-`]d.ddd `e`[`+`/`-`]ddd). An `E` conversion uses the letter `E` (rather than `e`) to introduce the exponent. The exponent always contains at least two digits; if the value is zero, the exponent is `00`. In Windows, the exponent contains three digits by default, e.g. `1.5e002`, but this can be altered by Microsoft-specific `_set_output_format` function.|`3.9265e+2` `3.9265E+2`\n<div id=\"g\"></div><div id=\"G\"></div>`g`, `G`| `double` in either normal or exponential notation, whichever is more appropriate for its magnitude. '`g`' uses lower-case letters, '`G`' uses upper-case letters. This type differs slightly from fixed-point notation in that insignificant zeroes to the right of the decimal point are not included. Also, the decimal point is not included on whole numbers.|`392.65`\n<div id=\"x\"></div><div id=\"X\"></div>`x`, `X`| `unsigned int` as a hexadecimal number. '`x`' uses lower-case letters and '`X`' uses upper-case.|`7fa` `7FA`\n<div id=\"o\"/>`o`| `unsigned int` in octal.|`610`\n<div id=\"s\"/>`s`| null-terminated string.|`sample`\n<div id=\"c\"/>`c`| `char` (character).|`a`\n<div id=\"p\"/>`p`| `void *` (pointer to void) in an implementation-defined format.|`b8000000`\n<div id=\"a\"></div><div id=\"A\"></div>`a`, `A`| `double` in hexadecimal notation, starting with \"0x\" or \"0X\". '`a`' uses lower-case letters, '`A`' uses upper-case letters.[9][10] (C++11 iostreams have a `hexfloat` that works the same).|`-0xc.90fep-2` `-0XC.90FEP-2`\n<div id=\"n\"/>`n`| Print nothing, but write number of characters successfully written so far into an integer pointer parameter.|\n<div id=\"%\"/>`%`| a literal '`%`' character (this type doesn't accept any flags, width, precision or length).|`%`\n\nCredit\n---\n**Open Source Projects**\n- [React](http://facebook.github.io/react/)\n- [flux](http://material-ui.com/#/)\n- [material-ui](http://material-ui.com/#/)\n- [marked](https://github.com/chjj/marked/)\n- [react-code-mirror](https://github.com/ForbesLindesay/react-code-mirror)\n- [react-tween-state](https://github.com/chenglou/react-tween-state/)\n- [google-closure-library](https://github.com/google/closure-library)\n- ...\n\n**Documentation**\n- [wikipedia](http://en.wikipedia.org/wiki/Printf_format_string)\n- [C++ documentation](http://www.cplusplus.com/reference/cstdio/printf/)\n";
+
+var Markdown = React.createClass({displayName: "Markdown",
+  mixins: [Classable],
+
+  render: function() {
+    var classes = this.getClasses('format', {
+      "markdown-body": true
+    });
+
+    var rawMarkup = marked(text);
+
+    return (
+      React.createElement("div", {className: classes}, 
+        React.createElement("span", {dangerouslySetInnerHTML: {__html: rawMarkup}})
+      )
+      );
+    }
+});
+
+module.exports = Markdown;
+
+},{"../../mixins/classable.js":311,"marked":14,"react":295}],302:[function(require,module,exports){
 var React = require('react');
 var Classable = require('../../mixins/classable.js');
 var tweenState = require('react-tween-state');
@@ -42093,7 +42112,7 @@ var PExpr = React.createClass({displayName: "PExpr",
 
 module.exports = PExpr;
 
-},{"../../mixins/classable.js":310,"react":295,"react-tween-state":133}],302:[function(require,module,exports){
+},{"../../mixins/classable.js":311,"react":295,"react-tween-state":133}],303:[function(require,module,exports){
 var React = require('react');
 var Classable = require('../../mixins/classable.js');
 
@@ -42254,7 +42273,7 @@ var Printer = React.createClass({displayName: "Printer",
 
 module.exports = Printer;
 
-},{"../../actions/EditorActionCreators.js":296,"../../libs/stringformat.js":309,"../../mixins/classable.js":310,"../../stores/EditorStore.js":311,"codemirror/addon/display/placeholder.js":8,"object-assign":83,"react":295,"react-code-mirror":84}],303:[function(require,module,exports){
+},{"../../actions/EditorActionCreators.js":296,"../../libs/stringformat.js":310,"../../mixins/classable.js":311,"../../stores/EditorStore.js":312,"codemirror/addon/display/placeholder.js":8,"object-assign":83,"react":295,"react-code-mirror":84}],304:[function(require,module,exports){
 var React = require('react');
 var assign = require('object-assign');
 var ohm = require('../../libs/ohm.js');
@@ -42560,7 +42579,7 @@ var Visualization = React.createClass({displayName: "Visualization",
     }
 
     return (
-      React.createElement("div", {className: "visualizationScrollWrapper"}, /*TODO: no longer needed*/
+      React.createElement("div", {className: "visualizationScrollWrapper"}, 
         React.createElement("div", {ref: "topLevelNodeWrapper", className: "visualization"}, 
           tree
         )
@@ -42576,7 +42595,7 @@ var Visualization = React.createClass({displayName: "Visualization",
 
 module.exports = Visualization;
 
-},{"../../actions/EditorActionCreators.js":296,"../../libs/ohm.js":308,"../../mixins/classable.js":310,"../../stores/EditorStore.js":311,"./PExpr.jsx":301,"keymirror":13,"object-assign":83,"react":295}],304:[function(require,module,exports){
+},{"../../actions/EditorActionCreators.js":296,"../../libs/ohm.js":309,"../../mixins/classable.js":311,"../../stores/EditorStore.js":312,"./PExpr.jsx":302,"keymirror":13,"object-assign":83,"react":295}],305:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var mui = require('material-ui');
@@ -42584,7 +42603,9 @@ var AppBar = mui.AppBar;
 var AppCanvas = mui.AppCanvas;
 var Menu = mui.Menu;
 var IconButton = mui.IconButton;
-RouteHandler = Router.RouteHandler;
+var RouteHandler = Router.RouteHandler;
+var Help = require('../components/Help.jsx');
+var EditorActionCreators = require('../../actions/EditorActionCreators.js');
 
 function getStateFromStores() {
   return {
@@ -42604,12 +42625,18 @@ var Demo = React.createClass({displayName: "Demo",
     children: React.PropTypes.element.isRequired
   },
 
+  onHelpButtonTouchTap: function() {
+    EditorActionCreators.highlightNode({displayString: "usage"});
+  },
+
   render: function() {
     var title = "Printf Format String Visualizer";
 
-    var githubButton = (
-      // <IconButton iconClassName="muidocs-icon-custom-github" tooltip="GitHub"/>
+    var helpButton = React.createElement(IconButton, {className: "help-button", tooltip: "Help", onTouchTap: this.onHelpButtonTouchTap}, 
+                        React.createElement(Help, null)
+                      );
 
+    var githubButton = (
       React.createElement(IconButton, {
         className: "github-icon-button", 
         iconClassName: "muidocs-icon-custom-github", 
@@ -42624,7 +42651,10 @@ var Demo = React.createClass({displayName: "Demo",
           title: title, 
           zDepth: 2, 
           showMenuIconButton: false}, 
-          githubButton
+          React.createElement("div", {className: "appbar-icon-group"}, 
+            helpButton, 
+            githubButton
+          )
         ), 
 
         React.createElement(RouteHandler, {key: this.getPath()})
@@ -42649,7 +42679,7 @@ var Demo = React.createClass({displayName: "Demo",
 */
 module.exports = Demo;
 
-},{"material-ui":15,"react":295,"react-router":94}],305:[function(require,module,exports){
+},{"../../actions/EditorActionCreators.js":296,"../components/Help.jsx":299,"material-ui":15,"react":295,"react-router":94}],306:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var assign = require('object-assign');
@@ -42711,7 +42741,7 @@ var Demo = React.createClass({displayName: "Demo",
 
 module.exports = Demo;
 
-},{"../../actions/EditorActionCreators.js":296,"../../stores/EditorStore.js":311,"../components/Explanation.jsx":298,"../components/Input.jsx":300,"../components/Printer.jsx":302,"../components/Visualization.jsx":303,"object-assign":83,"react":295,"react-router":94}],306:[function(require,module,exports){
+},{"../../actions/EditorActionCreators.js":296,"../../stores/EditorStore.js":312,"../components/Explanation.jsx":298,"../components/Input.jsx":300,"../components/Printer.jsx":303,"../components/Visualization.jsx":304,"object-assign":83,"react":295,"react-router":94}],307:[function(require,module,exports){
 var keyMirror = require('keymirror');
 
 module.exports = {
@@ -42741,7 +42771,7 @@ module.exports = {
 
 };
 
-},{"keymirror":13}],307:[function(require,module,exports){
+},{"keymirror":13}],308:[function(require,module,exports){
 var Constants = require('../constants/Constants.js');
 var Dispatcher = require('flux').Dispatcher;
 var assign = require('object-assign');
@@ -42778,7 +42808,7 @@ var AppDispatcher = assign(new Dispatcher(), {
 
 module.exports = AppDispatcher;
 
-},{"../constants/Constants.js":306,"flux":10,"object-assign":83}],308:[function(require,module,exports){
+},{"../constants/Constants.js":307,"flux":10,"object-assign":83}],309:[function(require,module,exports){
 (function (global){
 !function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.ohm=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
 var ohm = _dereq_('../src/main.js');
@@ -48018,7 +48048,7 @@ exports.UnicodeCategories = {
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],309:[function(require,module,exports){
+},{}],310:[function(require,module,exports){
 // Copyright 2008 The Closure Library Authors. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -48135,7 +48165,7 @@ var format = function(formatString, var_args) {
     }
 
     if (!/[%sfdiu]/.test(type)) {
-      throw Error('[goog.string.format] Specifier '+type+' is not supported');
+      throw Error('[goog.string.format] Specifier '+type+' is not supported. Supported specifiers are: s,f,d,i,u');
     }
 
     return format.demuxes_[type].apply(null, [value, flags, width, dotp, precision, type, offset, wholeString]);
@@ -48306,7 +48336,7 @@ format.demuxes_['u'] = format.demuxes_['d'];
 
 module.exports = format;
 
-},{}],310:[function(require,module,exports){
+},{}],311:[function(require,module,exports){
 var React = require('react/addons');
 var classSet = React.addons.classSet;
 
@@ -48350,7 +48380,7 @@ module.exports = {
 
 }
 
-},{"react/addons":134}],311:[function(require,module,exports){
+},{"react/addons":134}],312:[function(require,module,exports){
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var Constants = require('../constants/Constants');
 var EventEmitter = require('events').EventEmitter;
@@ -48609,4 +48639,4 @@ EditorStore.dispatchToken = AppDispatcher.register(function(payload) {
 
 module.exports = EditorStore;
 
-},{"../constants/Constants":306,"../dispatcher/AppDispatcher":307,"../libs/ohm.js":308,"events":6,"object-assign":83}]},{},[1]);
+},{"../constants/Constants":307,"../dispatcher/AppDispatcher":308,"../libs/ohm.js":309,"events":6,"object-assign":83}]},{},[1]);
