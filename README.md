@@ -1,9 +1,10 @@
 # printf
-A web based visualizer for printf format string
+A web based visualizer for printf format string.
+http://zhxnlai.github.io/printf/
 
 Building the website
 ---
-After install all dependencies:
+After installing all dependencies:
 ~~~
 npm install
 npm install -g gulp
@@ -33,6 +34,7 @@ Credit
 - [marked](https://github.com/chjj/marked/)
 - [react-code-mirror](https://github.com/ForbesLindesay/react-code-mirror)
 - [react-tween-state](https://github.com/chenglou/react-tween-state/)
+- [google-closure-library](https://github.com/google/closure-library)
 - ...
 
 **Documentation**
