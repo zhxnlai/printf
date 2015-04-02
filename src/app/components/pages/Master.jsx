@@ -5,7 +5,9 @@ var AppBar = mui.AppBar;
 var AppCanvas = mui.AppCanvas;
 var Menu = mui.Menu;
 var IconButton = mui.IconButton;
-RouteHandler = Router.RouteHandler;
+var RouteHandler = Router.RouteHandler;
+var Help = require('../components/Help.jsx');
+var EditorActionCreators = require('../../actions/EditorActionCreators.js');
 
 function getStateFromStores() {
   return {
@@ -25,12 +27,18 @@ var Demo = React.createClass({
     children: React.PropTypes.element.isRequired
   },
 
+  onHelpButtonTouchTap: function() {
+    EditorActionCreators.highlightNode({displayString: "usage"});
+  },
+
   render: function() {
     var title = "Printf Format String Visualizer";
 
-    var githubButton = (
-      // <IconButton iconClassName="muidocs-icon-custom-github" tooltip="GitHub"/>
+    var helpButton = <IconButton className="help-button" tooltip="Help" onTouchTap={this.onHelpButtonTouchTap}>
+                        <Help/>
+                      </IconButton>;
 
+    var githubButton = (
       <IconButton
         className="github-icon-button"
         iconClassName="muidocs-icon-custom-github"
@@ -45,7 +53,10 @@ var Demo = React.createClass({
           title={title}
           zDepth={2}
           showMenuIconButton={false}>
-          {githubButton}
+          <div className="appbar-icon-group">
+            {helpButton}
+            {githubButton}
+          </div>
         </AppBar>
 
         <RouteHandler key={this.getPath()} />

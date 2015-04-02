@@ -60,6 +60,10 @@
 	content: "\e625";
 }
 
+.muidocs-icon-help:before {
+	content: "\e626";
+}
+
 .muidocs-icon-custom-arrow-drop-right:before {
 	content: "\e60b";
 }
@@ -67,4 +71,3 @@
 .muidocs-icon-custom-pie:before {
 	content: "\e610";
 }
-
