@@ -114,7 +114,7 @@ var format = function(formatString, var_args) {
     }
 
     if (!/[%sfdiu]/.test(type)) {
-      throw Error('[goog.string.format] Specifier '+type+' is not supported');
+      throw Error('[goog.string.format] Specifier '+type+' is not supported. Supported specifiers are: s,f,d,i,u');
     }
 
     return format.demuxes_[type].apply(null, [value, flags, width, dotp, precision, type, offset, wholeString]);
