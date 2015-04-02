@@ -5,7 +5,7 @@ var assign = require('object-assign');
 var EditorStore = require('../../stores/EditorStore.js');
 var EditorActionCreators = require('../../actions/EditorActionCreators.js');
 
-var Format = require('./Format.jsx');
+var Markdown = require('./Markdown.jsx');
 
 function getStateFromStores() {
   return {
@@ -108,7 +108,7 @@ var Explanation = React.createClass({
     return (
       <div className={classes}>
         <div className="explanation-body">
-          <Format/>
+          <Markdown/>
         </div>
       </div>
       );

@@ -6,7 +6,7 @@ var marked = require('marked');
 var fs = require('fs');
 var text = fs.readFileSync(__dirname + '/../../../../resource/explanation.md', 'utf8');
 
-var Format = React.createClass({
+var Markdown = React.createClass({
   mixins: [Classable],
 
   render: function() {
@@ -24,4 +24,4 @@ var Format = React.createClass({
     }
 });
 
-module.exports = Format;
+module.exports = Markdown;
