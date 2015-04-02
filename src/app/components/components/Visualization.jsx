@@ -303,7 +303,7 @@ var Visualization = React.createClass({
     }
 
     return (
-      <div className="visualizationScrollWrapper">{/*TODO: no longer needed*/}
+      <div className="visualizationScrollWrapper">
         <div ref="topLevelNodeWrapper" className="visualization">
           {tree}
         </div>
