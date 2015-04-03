@@ -42255,15 +42255,22 @@ var Printer = React.createClass({displayName: "Printer",
     return (
       React.createElement("div", {className: classes}, 
         React.createElement("div", {className: "upper"}, 
-          React.createElement("code", {className: "left"}, "Arguments: "), 
+          React.createElement("div", {className: "left"}, 
+            "Arguments: ", 
+            React.createElement("div", {className: "placeholder"}, "Arguments: ")
+          ), 
           React.createElement("div", {className: "right"}, React.createElement(CodeMirror, React.__spread({ref: "codeMirror"},  props)))
         ), 
         React.createElement("div", {className: "middle"}, 
-          React.createElement("code", {className: "left"}, "Preview: "), 
+          React.createElement("div", {className: "left"}, "Preview: ", 
+            React.createElement("div", {className: "placeholder"}, "Arguments: ")
+          ), 
           React.createElement("div", {className: "right"}, React.createElement("pre", null, preview))
         ), 
         React.createElement("div", {className: "lower"}, 
-          React.createElement("code", {className: "left"}, "Results: "), 
+          React.createElement("div", {className: "left"}, "Results: ", 
+            React.createElement("div", {className: "placeholder"}, "Arguments: ")
+          ), 
           React.createElement("div", {className: "right"}, React.createElement("pre", null, results))
         )
       )
@@ -42649,7 +42656,7 @@ var Demo = React.createClass({displayName: "Demo",
         React.createElement(AppBar, {
           className: "mui-dark-theme", 
           title: title, 
-          zDepth: 2, 
+          zDepth: 1, 
           showMenuIconButton: false}, 
           React.createElement("div", {className: "appbar-icon-group"}, 
             helpButton, 
