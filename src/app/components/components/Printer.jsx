@@ -140,15 +140,22 @@ var Printer = React.createClass({
     return (
       <div className={classes}>
         <div className="upper">
-          <code className="left">{"Arguments: "}</code>
+          <div className="left">
+            {"Arguments: "}
+            <div className="placeholder">{"Arguments: "}</div>
+          </div>
           <div className="right"><CodeMirror ref="codeMirror" {...props}/></div>
         </div>
         <div className="middle">
-          <code className="left">{"Preview: "}</code>
+          <div className="left">{"Preview: "}
+            <div className="placeholder">{"Arguments: "}</div>
+          </div>
           <div className="right"><pre>{preview}</pre></div>
         </div>
         <div className="lower">
-          <code className="left">{"Results: "}</code>
+          <div className="left">{"Results: "}
+            <div className="placeholder">{"Arguments: "}</div>
+          </div>
           <div className="right"><pre>{results}</pre></div>
         </div>
       </div>

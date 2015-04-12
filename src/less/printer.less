@@ -1,19 +1,14 @@
 .printer {
+  // display: none !important;
+
   padding: 1em 1em;
 
   color: @grey-900;
-  line-height: 1.6;
 
-  display: -webkit-flex;
   display: flex;
+  flex-direction: column;
 
   width: 100%;
-
-  // -webkit-flex-wrap: wrap;
-  // flex-wrap: wrap;
-
-  -webkit-flex-direction: column;
-  flex-direction: column;
 
   .errorMsg {
     font-size: 0.5em;
@@ -27,17 +22,14 @@
     opacity: 1;
     max-height: 100pt;
 
-    -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
   }
 
   .shared {
-    display: -webkit-flex;
     display: flex;
+    .monoFont;
 
     .left {
-      -webkit-flex: 0 0 auto;
       flex: 0 0 auto;
     }
   }
@@ -45,14 +37,20 @@
   .upper {
     .shared;
     .right {
-      -webkit-flex: 1 1 auto;
       flex: 1 1 auto;
     }
   }
 
+  .placeholder {
+    height: 0;
+    visibility: hidden;
+  }
+
   .middle {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    
     .shared;
-    -webkit-align-items: baseline;
     align-items: baseline;
 
     .right {
@@ -67,7 +65,6 @@
 
   .lower {
     .shared;
-    -webkit-align-items: baseline;
     align-items: baseline;
 
     .right {
@@ -83,11 +80,10 @@
   .monoFont;
 
   .left, .right {
-    font-size: 24px;
+    font-size: 20px;
   }
 
   .mid {
-    -webkit-flex: 1 0.5 200px;
     flex: 1 0.5 200px;
   }
 

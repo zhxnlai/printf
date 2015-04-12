@@ -78,6 +78,7 @@ Credit
 ---
 **Open Source Projects**
 - [React](http://facebook.github.io/react/)
+- [react-router](https://github.com/rackt/react-router/)
 - [flux](http://material-ui.com/#/)
 - [material-ui](http://material-ui.com/#/)
 - [marked](https://github.com/chjj/marked/)
