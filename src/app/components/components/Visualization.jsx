@@ -216,7 +216,7 @@ var Visualization = React.createClass({
                           .substring(node.interval.startIdx, node.interval.endIdx)
                           .split("") // to array
                           // space, new line, tab
-                          .map(function(char) { return /\s/.test(char) ? <span className="whitespace">{'·'}</span> : char; });
+                          .map(function(char, i) { return /\s/.test(char) ? <span key={i} className="whitespace">{'·'}</span> : char; });
             if (content && content.length>0) {
               var shouldHighlight = false;
               var shouldDim = false;
@@ -298,8 +298,8 @@ var Visualization = React.createClass({
       failureMessage = "Cannot visualize on mobile browser:";
     }
     if (tree.length === 0) {
-      tree = [<h1 className="failureMessage">{failureMessage}</h1>,
-              <h2 className="failure">{this.state.text}</h2>];
+      tree = [<h1 key={1} className="failureMessage">{failureMessage}</h1>,
+              <h2 key={2} className="failure">{this.state.text}</h2>];
     }
 
     return (

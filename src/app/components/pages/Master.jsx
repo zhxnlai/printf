@@ -24,7 +24,7 @@ var Demo = React.createClass({
 
   propTypes: {
     // single child
-    children: React.PropTypes.element.isRequired
+    // children: React.PropTypes.element.isRequired
   },
 
   onHelpButtonTouchTap: function() {

@@ -26,8 +26,8 @@ function clone(obj) {
 }
 
 // HTML5 storage API
-var SOURCE_KEY = "printf_input";
-var ARGS_SOURCE_KEY = "printf_args";
+var SOURCE_KEY = "printf_input____";
+var ARGS_SOURCE_KEY = "printf_args____";
 var storageAvailable = typeof(Storage) !== "undefined";
 
 // detect mobile browser
