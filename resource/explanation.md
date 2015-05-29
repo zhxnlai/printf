@@ -5,7 +5,7 @@ This website is an educational tool that helps programmers understand the obscur
 ### Usage
 Hover over any expression in the visualization to see its documentation on the right.
 
-Modify the argument list in the lower left corner to preview the result. The preview is based on  [stringFormat](http://docs.closure-library.googlecode.com/git/local_closure_goog_string_stringformat.js.source.html) from Google Closure library, which implements a subset of printf in JavaScript.
+Modify the argument list in the lower left corner to preview the result. The preview is based on  [stringFormat](https://github.com/google/closure-library/blob/master/closure/goog/string/stringformat.js) from Google Closure library, which implements a subset of printf in JavaScript.
 
 Format placeholders
 ---
