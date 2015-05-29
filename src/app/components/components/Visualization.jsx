@@ -3,14 +3,11 @@ var assign = require('object-assign');
 var ohm = require('../../libs/ohm.js');
 var keyMirror = require('keymirror');
 var cx = React.addons.classSet;
-// var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-// <ReactCSSTransitionGroup transitionName="example"></ReactCSSTransitionGroup>
 var ReactTransitionGroup = React.addons.TransitionGroup;
 
 var PExpr = require('./PExpr.jsx');
 
 var Classable = require('../../mixins/classable.js');
-// var WindowListenable = require('../../mixins/window-listenable.js');
 var EditorStore = require('../../stores/EditorStore.js');
 var EditorActionCreators = require('../../actions/EditorActionCreators.js');
 
@@ -45,16 +42,6 @@ function isBlackhole(traceNode) {
            blackholeNodeTypes[desc]) {
       return true;
     }
-
-    // if (desc[desc.length - 1] === '_' ||
-    //        desc === 'space' || desc === 'empty' ||
-    //        blackholeNodeTypes[desc]) {
-    //   return true;
-    // }
-    // hide empty chars
-    // if (desc === "chars" && traceNode.interval && traceNode.interval.startIdx === traceNode.interval.endIdx) {
-    //   return true;
-    // }
   }
 
   var ret = false;
@@ -139,11 +126,10 @@ var Visualization = React.createClass({
    */
   _onChange: function() {
     var newState = getStateFromStores();
-
+    var cursorIdx = newState.cursorIndex;
     newState.cursorHighlightedTopLevelNode = undefined;
     React.Children.forEach(this.refs.topLevelNodeWrapper.props.children, function(child) {
       var node = child.props.node;
-      var cursorIdx = newState.cursorIndex;
       if (cursorIdx !== undefined && node && node.interval) {
         if (node.interval.startIdx <= cursorIdx &&
             cursorIdx <= node.interval.endIdx ) {
@@ -165,11 +151,6 @@ var Visualization = React.createClass({
   },
 
   onMouseEnterTopLevelPExpr: function(node, e) {
-    // if (this.lastTimeoutIDEnter) {
-    //   window.clearTimeout(this.lastTimeoutIDEnter);
-    // }
-    //
-    // this.lastTimeoutIDEnter = window.setTimeout(function(){EditorActionCreators.highlightTopLevelNode(node);}, 100);
     if (this.lastTimeoutIDLeave) {
       window.clearTimeout(this.lastTimeoutIDLeave);
     }
@@ -181,7 +162,6 @@ var Visualization = React.createClass({
       window.clearTimeout(this.lastTimeoutIDLeave);
     }
     this.lastTimeoutIDLeave = window.setTimeout(function(){EditorActionCreators.highlightTopLevelNode(undefined);}, 500);
-    // EditorActionCreators.highlightTopLevelNode(undefined);
   },
 
   onClickPExpr: function(node, e) {
@@ -191,7 +171,7 @@ var Visualization = React.createClass({
 
   render: function() {
     var tree = [];
-    var trace = this.state.trace;
+    var {trace, isMobile, text} = this.state;
     if (trace) {
 
       var inputCharWrapperCount = 0;
@@ -199,9 +179,10 @@ var Visualization = React.createClass({
       var self = this;
       tree = (function walkTraceNodes(nodes, showTrace, isDirectChildOfFormat, isDesendenceOfFormat) {
         return nodes.map(function(node, i) {
-          if (!node.succeeded) return;  // TODO: Allow failed nodes to be shown.
+          var {expr, succeeded, interval, children} = node;
+          if (!succeeded) return;  // TODO: Allow failed nodes to be shown.
 
-          var contents = isPrimitive(node.expr) ? node.interval.contents : '';
+          var contents = isPrimitive(expr) ? interval.contents : '';
           var isWhitespace = contents.length > 0 && contents.trim().length === 0;
 
           var shouldShowTrace = showTrace && !isBlackhole.bind(self)(node);
@@ -212,22 +193,23 @@ var Visualization = React.createClass({
           }
           var willBeDecendenceOfFormat = isDesendenceOfFormat || willBeDirectChildOfFormat;
 
-          var childNodes = walkTraceNodes(node.children, shouldShowTrace, willBeDirectChildOfFormat, willBeDecendenceOfFormat);
+          var childNodes = walkTraceNodes(children, shouldShowTrace, willBeDirectChildOfFormat, willBeDecendenceOfFormat);
           // leaf node
           if (childNodes.length === 0) {
-            var content = node.interval.inputStream.source
-                          .substring(node.interval.startIdx, node.interval.endIdx)
+            var content = interval.inputStream.source
+                          .substring(interval.startIdx, interval.endIdx)
                           .split("") // to array
                           // space, new line, tab
                           .map(function(char, i) { return /\s/.test(char) ? <span key={i} className="whitespace">{'·'}</span> : char; });
             if (content && content.length>0) {
               var shouldHighlight = false;
               var shouldDim = false;
-              if (self.state.highlightedNode) {
-                var highlightedInterval = self.state.highlightedNode.interval;
+              var {highlightedNode} = self.state;
+              if (highlightedNode) {
+                var highlightedInterval = highlightedNode.interval;
                 if (highlightedInterval) {
-                  if (node.interval.startIdx >= highlightedInterval.startIdx &&
-                     node.interval.endIdx <= highlightedInterval.endIdx) {
+                  if (interval.startIdx >= highlightedInterval.startIdx &&
+                     interval.endIdx <= highlightedInterval.endIdx) {
                    shouldHighlight = true;
                  } else {
                    shouldDim = true;
@@ -297,12 +279,12 @@ var Visualization = React.createClass({
     }
 
     var failureMessage = "Cannot visualize:";
-    if (this.state.isMobile) {
+    if (isMobile) {
       failureMessage = "Cannot visualize on mobile browser:";
     }
     if (tree.length === 0) {
       tree = [<h1 key={1} className="failureMessage">{failureMessage}</h1>,
-              <h2 key={2} className="failure">{this.state.text}</h2>];
+              <h2 key={2} className="failure">{text}</h2>];
     }
 
     return (

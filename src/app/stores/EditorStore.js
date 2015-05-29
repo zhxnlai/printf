@@ -79,7 +79,6 @@ var store = function() {
     },
     highlightNode: function(node) {
       highlightedNode = clone(node);
-      // console.log(highlightedNode);
     },
 
     getHighlightedTopLevelNode: function() {
@@ -115,8 +114,6 @@ var store = function() {
       if (storageAvailable) {
         localStorage.setItem(ARGS_SOURCE_KEY, value);
       }
-
-      // console.log(argsText);
       this.updateArgs();
     },
     updateArgs: function() {
@@ -127,30 +124,8 @@ var store = function() {
           newArgs = eval("["+argsText+"]");
           argsErrorMsg = "";
         } catch(e) {
-          // console.log(e instanceof SyntaxError); // true
-          // console.log(e.message);                // "missing ; before statement"
-          // console.log(e.name);                   // "SyntaxError"
-          // console.log(e.fileName);               // "Scratchpad/1"
-          // console.log(e.lineNumber);             // 1
-          // console.log(e.columnNumber);           // 4
-          // console.log(e.stack);                  // "@Scratchpad/1:2:3\n"
-          // highlight
-          // console.log("args parsing syntax error");
           argsErrorMsg = e.toString();
         }
-
-        // console.log(newArgs);
-
-        // if (Array.isArray(newArgs)){
-        //   if (newArgs.some(function(item) {
-        //     return !(typeof item === "string" || typeof item === "number");
-        //   })) {
-        //     console.log("args type error");
-        //     // argsErrorMsg = e.toString();
-        //   } else {
-        //   }
-        // }
-
       }
 
       args = newArgs.filter(function(item) {
@@ -172,7 +147,6 @@ var store = function() {
         } catch (err) {
           g = undefined;
           console.log(err);
-          throw err;
         }
       }
       this.updateTrace();
@@ -182,8 +156,6 @@ var store = function() {
     updateTrace: function() {
       if (g) {
         try {
-          // var jsString = eval("\""+text+"\""); // this will require source mapping
-          // var root = 
           trace = g.trace(text, 'Expr');
         } catch (e) {
           if (!(e instanceof ohm.error.MatchFailure))

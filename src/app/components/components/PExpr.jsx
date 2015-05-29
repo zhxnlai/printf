@@ -74,18 +74,15 @@ var PExpr = React.createClass({
     var style = {
     };
 
-    if ( this.props.shouldAnimate && this.animatedStarted) {
+    var {shouldAnimate, parent, node, count, children, isWhitespace, isInsideFormat} = this.props;
+
+    if ( shouldAnimate && this.animatedStarted) {
       var width = this.getTweeningValue('width');
       style.width = width;
       // console.log("width: "+style.width +" actualWidth: "+parseFloat(window.getComputedStyle(this.getDOMNode()).width));
     }
 
-    var parent = this.props.parent;
-    var node = this.props.node;
-    var formatPExprCount = this.props.count;
-    var childNodes = this.props.children;
-    var isWhitespace = this.props.isWhitespace;
-    if (this.props.isInsideFormat) {
+    if (isInsideFormat) {
       isWhitespace = false;
     }
     // label
@@ -104,15 +101,15 @@ var PExpr = React.createClass({
       onMouseLeave: parent.onMouseOutPExpr,
       onClick: parent.onClickPExpr.bind(parent, node),
     };
-    var label = <div key={"label#"+formatPExprCount} className={labelClasses} {...labelProps}>{displayString}</div>;
+    var label = <div key={"label#"+count} className={labelClasses} {...labelProps}>{displayString}</div>;
 
     // children
-    var children =
-      <div key={"children#"+formatPExprCount} className="children">
+    var childrenWrapper =
+      <div key={"children#"+count} className="children">
         {(displayString === "format") ? <ReactTransitionGroup className="childrenCSSTransitionGroup" component="div">
-                                          {childNodes}
+                                          {children}
                                         </ReactTransitionGroup>
-                                      : {childNodes}}
+                                      : {children}}
       </div>;
 
     // pexpr
@@ -123,9 +120,9 @@ var PExpr = React.createClass({
     var pexprProps = {
       node: node,
     };
-    // key={"formatPExpr#"+formatPExprCount+"type:"+displayString}
+    // key={"formatPExpr#"+count+"type:"+displayString}
     return <div style={style} className={pexprClasses} {...pexprProps}>
-            {label}{children}
+            {label}{childrenWrapper}
           </div>;
 
   }

@@ -1,8 +1,6 @@
 var React = require('react');
 var Classable = require('../../mixins/classable.js');
-
 var assign = require('object-assign');
-
 var CodeMirror = require('react-code-mirror');
 require('codemirror/addon/display/placeholder.js');
 
@@ -17,7 +15,6 @@ function getStateFromStores() {
     argsText : EditorStore.getArgsText(),
     argsErrorMsg : EditorStore.getArgsErrorMsg(),
     args : EditorStore.getArgs(),
-    // trace : EditorStore.getTrace(),
     highlightedNode : EditorStore.getHighlightedNode(),
   };
 }
@@ -33,7 +30,6 @@ var Printer = React.createClass({
 
   componentDidMount: function() {
     EditorStore.addChangeListener(this._onChange);
-    // this.refs.codeMirror.editor.on('cursorActivity', this.handleCursorActivity);
   },
 
   componentWillUnmount: function() {
@@ -61,12 +57,6 @@ var Printer = React.createClass({
     EditorActionCreators.changeArgsText(e.target.value);
   },
 
-  // handleCursorActivity: function() {
-  //   var cm = this.refs.codeMirror.editor;
-  //   var cursorIndex = cm.indexFromPos(cm.getCursor());
-  //   EditorActionCreators.changeCursorIndex(cursorIndex);
-  // },
-
   highlight: function(msg) {
     var cm = this.refs.codeMirror.editor;
     if (this.lineWidget) {
@@ -85,39 +75,15 @@ var Printer = React.createClass({
 
   render: function() {
     var classes = this.getClasses('printer', {
-      // "prin": true
     });
 
-
-    // var formatNodes = [];
-    // var trace = this.state.trace;
-    // if (trace) {
-    //   (function findFormatNodes(nodes) {
-    //     nodes.forEach(function(node, i) {
-    //       var displayString = node.displayString;
-    //       if (displayString === "format") {
-    //         if (node.interval.startIdx < node.interval.endIdx) {
-    //           formatNodes.push(node);
-    //         }
-    //       } else {
-    //         // no format inside format
-    //         findFormatNodes(node.children);
-    //       }
-    //     });
-    //   })(trace);
-    // }
-
-    var args = this.state.args;
-    var text = this.state.text;
-
-    // console.log(JSON.stringify(args));
+    var {args, text, argsText} = this.state;
 
     var preview = "Preview not available.";
     var results = "Results not available.";
-    var numArgsString = "";// "("+args.length+"/"+formatNodes.length+")";
 
     if (args && text) {
-      var argsString = this.state.argsText.length === 0 ? "" : ", "+this.state.argsText;
+      var argsString = argsText.length === 0 ? "" : ", "+argsText;
       preview = "printf(\""+text+"\""+argsString+");";
 
       try {
@@ -131,9 +97,8 @@ var Printer = React.createClass({
     var props = {
       lineWrapping: true,
       viewportMargin: Infinity,
-      // lineNumbers: true,
       onChange: this.onEditorTextChange,
-      defaultValue: this.state.argsText,
+      defaultValue: argsText,
       placeholder: "Insert arguments here..."
     };
 
