@@ -12,12 +12,7 @@
   // prevent inline-block from wrapping
   // white-space: nowrap;
 
-  display: -webkit-flex;
   display: flex;
-
-  -webkit-flex-direction: row;
-  -webkit-flex-wrap: wrap;
-  // -webkit-justify-content:  space-around;
 
   flex-direction: row;
   flex-wrap: wrap;
@@ -26,20 +21,13 @@
   .topLevelNode {
     margin-top: 45px;
     position: relative;
-    -webkit-flex: 0 1 auto;
     flex: 0 1 auto;
-    // margin-right: 0.5em;
-
-    // -webkit-flex: 1 0 auto;
-    // -webkit-transition: -webkit-flex 250ms linear;
-    // transition: flex 250ms linear;
   }
 
   .inputCharWrapper {
     margin: auto;
     overflow: visible;
     height: 0;
-    -webkit-flex: 1 1 auto;
     flex: 1 1 auto;
     text-align: center;
 
@@ -80,7 +68,6 @@
   // color: #333;
   color: @grey-900;
   display: inline-block;
-  -webkit-flex-grow: 1;
   flex-grow: 1;
   .monoFont;
   // font-weight: 400;
@@ -134,18 +121,14 @@
   }
 
   .children {
-    display: -webkit-flex;
     display: flex;
-    -webkit-flex: 1;
     flex: 1;
   }
   .children[hidden] {
     display: none;
   }
   .childrenCSSTransitionGroup {
-    display: -webkit-flex;
     display: flex;
-    -webkit-flex: 1;
     flex: 1;
   }
 }
@@ -188,8 +171,6 @@
 .failure {
   .monoFont;
 }
-
-
 
 #options {
   background-color: white;
