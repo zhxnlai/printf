@@ -83,15 +83,19 @@ var Explanation = React.createClass({
   },
 
   componentDidUpdate: function() {
-    if (this.state.highlightedNode) {
+    var {highlightedNode} = this.state;
+    if (highlightedNode) {
       if (this.lastHighlightedNode) {
         this.lastHighlightedNode.classList.remove("highlightRule");
       }
 
-      var displayString = this.state.highlightedNode.displayString;
-      var elementId = displayNameToId[displayString] ? displayNameToId[displayString]
-                                                     : displayString;
-      this.showBookmark(elementId, false);
+      var {expr} = highlightedNode;
+      if (expr) {
+        var displayString = expr.toDisplayString();
+        var elementId = displayNameToId[displayString] ? displayNameToId[displayString]
+                                                       : displayString;
+        this.showBookmark(elementId, false);
+      }
     }
   },
 
