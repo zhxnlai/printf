@@ -3,6 +3,11 @@ var Constants = require('../constants/Constants');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
 var ohm = require('../libs/ohm.js');
+var ohm = require('ohm');
+
+// using brfs transform
+var fs = require('fs');
+var grammar = fs.readFileSync(__dirname + '/printfGrammar.ohm', 'utf8');
 
 var ActionTypes = Constants.ActionTypes;
 
@@ -160,15 +165,14 @@ var store = function() {
       return argsErrorMsg;
     },
 
-    getGrammar: function(namespace, domId, grammar) {
+    getGrammar: function() {
       if (!g) {
         try {
-          g = ohm.namespace(namespace)
-            .loadGrammarsFromScriptElement(document.getElementById(domId))
-            .grammar(grammar);
+          g = ohm.grammar(grammar);
         } catch (err) {
           g = undefined;
           console.log(err);
+          throw err;
         }
       }
       this.updateTrace();
@@ -179,8 +183,8 @@ var store = function() {
       if (g) {
         try {
           // var jsString = eval("\""+text+"\""); // this will require source mapping
-          var root = g.matchContents(text, 'Expr', true, true);
-          trace = root._trace;
+          // var root = 
+          trace = g.trace(text, 'Expr');
         } catch (e) {
           if (!(e instanceof ohm.error.MatchFailure))
             throw e;
@@ -217,7 +221,7 @@ EditorStore.dispatchToken = AppDispatcher.register(function(payload) {
   var action = payload.action;
   switch (action.type) {
     case ActionTypes.DID_MOUNT:
-      var g = EditorStore.getGrammar('demo', 'arithmetic', 'MyLang');
+      var g = EditorStore.getGrammar();
       EditorStore.updateArgs();
       EditorStore.emitChange();
       break;

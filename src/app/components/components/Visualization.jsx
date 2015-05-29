@@ -77,7 +77,6 @@ function isBlackhole(traceNode) {
     });
   }
 
-
   return ret;
 }
 
@@ -114,6 +113,10 @@ function shouldNodeBeVisible(traceNode) {
   }
 
   return true;
+}
+
+function isPrimitive(expr) {
+  return expr.constructor.name.indexOf('Prim') >= 0;
 }
 
 var Visualization = React.createClass({
@@ -198,7 +201,7 @@ var Visualization = React.createClass({
         return nodes.map(function(node, i) {
           if (!node.succeeded) return;  // TODO: Allow failed nodes to be shown.
 
-          var contents = node.expr.isPrimitive() ? node.interval.contents : '';
+          var contents = isPrimitive(node.expr) ? node.interval.contents : '';
           var isWhitespace = contents.length > 0 && contents.trim().length === 0;
 
           var shouldShowTrace = showTrace && !isBlackhole.bind(self)(node);
@@ -271,7 +274,7 @@ var Visualization = React.createClass({
           var ret = node === undefined || (Array.isArray(node) && node.length === 0);
           return !ret;
         });
-      })(trace, true, false, false);
+      })(trace.children, true, false, false);
 
       // wrap top level nodes, make them line wrappable
       var topLevelNodeCount = 0;

@@ -53,6 +53,7 @@
     "marked": "^0.3.2",
     "material-ui": "^0.7.1",
     "object-assign": "^2.0.0",
+    "ohm": "0.0.0",
     "purecss": "^0.5.0",
     "react": "^0.12.2",
     "react-code-mirror": "^3.0.3",

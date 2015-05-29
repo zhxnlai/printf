@@ -5,6 +5,10 @@ var ReactTransitionGroup = React.addons.TransitionGroup;
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 var cx = React.addons.classSet;
 
+function isPrimitive(expr) {
+  return expr.constructor.name.indexOf('Prim') >= 0;
+}
+
 var PExpr = React.createClass({
   mixins: [Classable, tweenState.Mixin],
 
@@ -85,7 +89,7 @@ var PExpr = React.createClass({
       isWhitespace = false;
     }
     // label
-    var isPrim = node.expr.isPrimitive();
+    var isPrim = isPrimitive(node.expr);
     var displayString = node.displayString;
     if (displayString === "/[\\s]/") {
       displayString = '·';
