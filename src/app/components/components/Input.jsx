@@ -2,7 +2,7 @@ var React = require('react');
 var Classable = require('../../mixins/classable.js');
 var assign = require('object-assign');
 
-var CodeMirror = require('react-code-mirror');
+var CodeMirror = require('./ReactCodeMirror.jsx');
 
 var EditorStore = require('../../stores/EditorStore.js');
 var EditorActionCreators = require('../../actions/EditorActionCreators.js');

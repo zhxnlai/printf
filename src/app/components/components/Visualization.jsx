@@ -298,8 +298,4 @@ var Visualization = React.createClass({
 
 });
 
-// <ReactTransitionGroup key={"topLevelNode#"+topLevelNodeCount} className="topLevelNode"  {...topLevelNodeProps} component="div">
-//                                   {tree}
-//       </ReactTransitionGroup>;
-
 module.exports = Visualization;
