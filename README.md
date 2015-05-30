@@ -28,6 +28,7 @@ gulp deploy
 Credit
 ---
 **Open Source Projects**
+- [Ohm](https://github.com/cdglabs/ohm)
 - [React](http://facebook.github.io/react/)
 - [flux](http://material-ui.com/#/)
 - [material-ui](http://material-ui.com/#/)
