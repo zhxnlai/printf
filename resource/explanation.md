@@ -77,6 +77,7 @@ Character|Description|Example
 Credit
 ---
 **Open Source Projects**
+- [Ohm](https://github.com/cdglabs/ohm)
 - [React](http://facebook.github.io/react/)
 - [react-router](https://github.com/rackt/react-router/)
 - [flux](http://material-ui.com/#/)
